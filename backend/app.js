@@ -8,7 +8,7 @@ const liveRouter = require('./routes/live');
 const {cookie} = require("express-validator");
 const {httpOnly, expires} = require("express-session/session/cookie");
 const bodyParser = require("body-parser");
-
+const expressValidator = require("express-validator");
 const app = express();
 
 app.use('/live', liveRouter);
@@ -16,7 +16,7 @@ app.use('/live', liveRouter);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(expressValidator());
 app.use(cookieParser());
 
 app.use(session({
