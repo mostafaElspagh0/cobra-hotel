@@ -8,6 +8,7 @@ const express = require("express"),
     User = require("./models/user"),
     app =express(),
     path = require("express");
+const {check, validationResult} = require("express-validator");
 
 
 mongoose.connect('../services/database/models/user.js');
@@ -16,15 +17,16 @@ mongoose.connect('../services/database/models/user.js');
 app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname + '/login.html'));
 })
-app.post("/register",  (req, res)=> {
-    const username = req.body.username;
-    const password = req.body.password;
-    req.check('userName','invalidUserName').notEmpty();
-    const errors =req.validationErrors();
-    if(errors){
-        console.log(errors)
-        res.redirect('/')
-    }else {
+app.post('/register',
+    [
+        check('username', 'Name is required').notEmpty(),
+        check('password','Please enter a password with 6 or more characters').isLength({ min: 6 }),
+    ],
+    async (req, res) => {
+        let errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }else {
         User.register(new User({username: username}), password, (err, user) => {
             if (err) {
                 console.log(err);
