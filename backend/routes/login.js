@@ -1,19 +1,12 @@
-const express = require("express"),
-     router = express.Router(),
-     jwt = require('jsonwebtoken'),
-     bcrypt = require('bcryptjs'),
-     config = require('config'),
+const express = require("express")
+const router = express.Router()
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const config = require('config')
+const {check, validationResult} = require("express-validator");
 
-    mongoose = require("mongoose"),
-    User = require("./services/database/models/user"),
-    // passport = require("passport"),
-    // bodyParser = require("body-parser"),
-    // LocalStrategy = require("passport-local"),
-    // passportLocalMongoose = require("passport-local-mongoose"),
-    // app =express(),
-    // path = require("express"),
-     {check, validationResult} = require("express-validator");
-      mongoose.connect('../services/database/models/user.js');
+const User = require("./services/database/models/user")
+
 
 router.post('/login',
     [
