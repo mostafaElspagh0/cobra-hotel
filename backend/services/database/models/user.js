@@ -17,7 +17,7 @@ const userScheme = new Schema(
         job_type : {
             type : String ,
             required:true,
-            enum: ['Manager', 'Hr','Secretary', 'Barista'],
+            enum: ['Manager', 'Hr','Receptionist', 'Barista'],
             default: 'user',
         },
         email: {
@@ -54,9 +54,9 @@ const userScheme = new Schema(
     }
 )
 
-const hrModel = mongoose.model('user', userScheme);
+const userModel = mongoose.model('user', userScheme);
 
-hrModel.prototype.toJwtPayload = function() {
+userModel.prototype.toJwtPayload = function() {
     const user = this.toObject();
     return {
         id: user._id.toString(),
@@ -64,4 +64,4 @@ hrModel.prototype.toJwtPayload = function() {
         role: user.role,
     };
 }
-module.exports = hrModel;
+module.exports = userModel;
