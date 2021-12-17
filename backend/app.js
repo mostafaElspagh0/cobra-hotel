@@ -6,7 +6,7 @@ const cors = require('cors');
 const logger = require('morgan');
 const passport = require ('passport')
 const liveRouter = require('./routes/live');
-const loginRouter = require('./routes/login');
+const loginRouter = require('./routes/auth');
 
 const bodyParser = require("body-parser");
 const app = express();
