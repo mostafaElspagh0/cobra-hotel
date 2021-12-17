@@ -61,7 +61,7 @@ userModel.prototype.toJwtPayload = function() {
     return {
         id: user._id.toString(),
         name: user.name,
-        role: user.role,
+        job_type: user.job_type,
     };
 }
 module.exports = userModel;
