@@ -9,4 +9,5 @@ module.exports = {
   },
   'jwt_config':{ expiresIn: 360000, algorithm: 'HS384' },
   "jwtSecret":"Secret Secret",
+  "SALT_WORK_FACTOR" : 10 ,
 };
