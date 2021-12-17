@@ -1,41 +1,61 @@
-
 const express = require("express"),
+     router = express.Router(),
+     jwt = require('jsonwebtoken'),
+     bcrypt = require('bcryptjs'),
+     config = require('config'),
+
     mongoose = require("mongoose"),
-    passport = require("passport"),
-    bodyParser = require("body-parser"),
-    LocalStrategy = require("passport-local"),
-    passportLocalMongoose = require("passport-local-mongoose"),
-    User = require("./models/user"),
-    app =express(),
-    path = require("express");
-const {check, validationResult} = require("express-validator");
+    User = require("./services/database/models/user"),
+    // passport = require("passport"),
+    // bodyParser = require("body-parser"),
+    // LocalStrategy = require("passport-local"),
+    // passportLocalMongoose = require("passport-local-mongoose"),
+    // app =express(),
+    // path = require("express"),
+     {check, validationResult} = require("express-validator");
+      mongoose.connect('../services/database/models/user.js');
 
-
-mongoose.connect('../services/database/models/user.js');
-
-
-app.get('/', (req, res)=> {
-    res.sendFile(path.join(__dirname + '/login.html'));
-})
-app.post('/register',
+router.post('/login',
     [
-        check('username', 'Name is required').notEmpty(),
-        check('password','Please enter a password with 6 or more characters').isLength({ min: 6 }),
+        check('email', 'Please include a valid email').isEmail(),
+        check('password', 'Password is required').exists().isLength({min:8})
     ],
     async (req, res) => {
         let errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
-        }else {
-        User.register(new User({username: username}), password, (err, user) => {
-            if (err) {
-                console.log(err);
-                return res.render("register");
+        }
+        let { email, password } = req.body;
+        try {
+            let user = await User.findOne({ email });
+            if (!user) {
+                return res
+                    .status(400)
+                    .json({ errors: [{ msg: 'Invalid credentials' }] });
             }
-
-            passport.authenticate("local")(req, res, function () {
-                res.render("secret");
-            });
-        });
+            const isMatch = await bcrypt.compare(password, user.passwordHash);
+            if (!isMatch) {
+                return res
+                    .status(400)
+                    .json({ errors: [{ msg: 'Invalid credentials' }] });
+            }
+            const payload = {
+                user: user.toJwtPayload()
+            };
+            jwt.sign(
+                payload,
+                config.get('jwtSecret'),
+                config.get('jwt_config'),
+                (err, token) => {
+                    if (err) throw err;
+                    res.json({ token });
+                }
+            );
+        }
+        catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
     }
-});
+);
+module.exports = router;
