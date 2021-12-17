@@ -11,26 +11,26 @@ const User = require("./services/database/models/user")
 router.post('/login',
     [
         check('email', 'Please include a valid email').isEmail(),
-        check('password', 'Password is required').exists().isLength({min:8})
+        check('password', 'Password is required').exists().isLength({min: 8})
     ],
     async (req, res) => {
         let errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({errors: errors.array()});
         }
-        let { email, password } = req.body;
+        let {email, password} = req.body;
         try {
-            let user = await User.findOne({ email });
+            let user = await User.findOne({email});
             if (!user) {
                 return res
                     .status(400)
-                    .json({ errors: [{ msg: 'Invalid credentials' }] });
+                    .json({errors: [{msg: 'Invalid credentials'}]});
             }
             const isMatch = await bcrypt.compare(password, user.passwordHash);
             if (!isMatch) {
                 return res
                     .status(400)
-                    .json({ errors: [{ msg: 'Invalid credentials' }] });
+                    .json({errors: [{msg: 'Invalid credentials'}]});
             }
             const payload = {
                 user: user.toJwtPayload()
@@ -41,11 +41,10 @@ router.post('/login',
                 config.get('jwt_config'),
                 (err, token) => {
                     if (err) throw err;
-                    res.json({ token });
+                    res.json({token});
                 }
             );
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err.message);
             res.status(500).send('Server Error');
         }
