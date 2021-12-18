@@ -3,6 +3,9 @@ const config = require('config');
 
 function dbURI() {
     const dbConfig = config.get('database_config');
+    if(dbConfig.uri) {
+        return dbConfig.uri;
+    }
     if (dbConfig.type !== 'mongodb') {
         throw new Error('Invalid database type');
     }
