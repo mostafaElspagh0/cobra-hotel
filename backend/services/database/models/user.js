@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-  //this is user schema
+const bcrypt = require('bcryptjs');
+const config = require('config');
 const userScheme = new Schema(
     {
         name: {
@@ -54,6 +55,19 @@ const userScheme = new Schema(
     }
 )
 
+userScheme.pre('save',function(next){
+    const user =this;
+    if (!user.isModified('password')) return next();
+    bcrypt.genSalt(config.get("SALT_WORK_FACTOR"),function(err,salt){
+        if(err)return  next(err);
+        bcrypt.hash(user.password,salt,function (err,hash){
+            if(err) return next(err);
+            user.password=hash;
+            next();
+        });
+    });
+})
+
 const userModel = mongoose.model('user', userScheme);
 
 userModel.prototype.toJwtPayload = function() {
@@ -61,7 +75,7 @@ userModel.prototype.toJwtPayload = function() {
     return {
         id: user._id.toString(),
         name: user.name,
-        role: user.role,
+        job_type: user.job_type,
     };
 }
 module.exports = userModel;
