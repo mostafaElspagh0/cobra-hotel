@@ -19,11 +19,9 @@ function dbURI() {
 }
 
 function registerModels() {
-    const user = require ('./models/user');
-    const room = require ('./models/rooms');
-    const store = require ('./models/store');
-
-
+    require ('./models/user');
+    require ('./models/rooms');
+    require ('./models/store');
 }
 
 function registerEventHandlers() {
