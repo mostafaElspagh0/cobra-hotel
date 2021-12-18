@@ -20,8 +20,6 @@ function dbURI() {
 
 function registerModels() {
     require ('./models/user');
-    require ('./models/rooms');
-    require ('./models/store');
 }
 
 function registerEventHandlers() {
