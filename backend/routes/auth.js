@@ -34,7 +34,7 @@ router.post('/register',
             const userObj =user.toObject();
             delete userObj.password;
             res.json({msg: 'user created'user :userObj});
-            };
+            }
 
         catch (err) {
             console.error(err.message);
@@ -87,4 +87,16 @@ router.post('/login',
         }
     }
 );
+router.get('/getAllUsers',(req, res, next)=>{
+    User.find({},(err,resualt)=>{
+        if(err){
+            console.log(err)
+            res.redirect('/');
+        }else {
+            console.log(resualt)
+            res.render('index',{items : resualt})
+        }
+
+    })
+})
 module.exports = router;
