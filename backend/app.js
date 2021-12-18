@@ -1,10 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-//--
 const cors = require('cors');
 const config = require('config')
 const logger = require('morgan');
-const passport = require ('passport')
 const liveRouter = require('./routes/live');
 const authRouter = require('./routes/auth');
 
