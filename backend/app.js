@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 //--
 const cors = require('cors');
-
+const config = require('config')
 const logger = require('morgan');
 const passport = require ('passport')
 const liveRouter = require('./routes/live');
@@ -19,7 +19,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-    origin: 'http://localhost:3000/',
+    origin: config.get('corsOrigin'),
     credentials: true
 }));
 app.use(cookieParser());
