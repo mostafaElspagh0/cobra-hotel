@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const config = require('config')
 const {check, validationResult} = require("express-validator");
 
-const User = require("./services/database/models/user")
+const User = require("../services/database/models/user")
 
 
 router.post('/login',
