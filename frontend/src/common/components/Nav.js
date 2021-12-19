@@ -11,9 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from '../../common/logo.svg'
+import logo from '../resoursces/logo.svg'
 import {CssBaseline} from "@mui/material";
-import avat from './avat.png';
+import avat from '../resoursces/avat.png';
 
 const pages = ['Employee', 'Announcment', 'Send E-mail', 'Orders' , 'Storage' , 'Arrival' , 'Cleaning'];
 const settings = [ 'Dashboard', 'Logout'];
