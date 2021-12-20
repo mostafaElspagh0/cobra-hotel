@@ -52,3 +52,18 @@ router.post('/',
             }
     }
 );
+
+router.get('/:ID' ,
+    async (req , res ) => {
+            let D = req.query.Page;
+            let df = req.query.perPage;
+            let employees = User.find();
+            res.json({
+                    employees: employees
+            })
+            employees.find({id: req.params.id}, (err, items) => {
+                    if (err) res.status(500).send(error)
+                    res.status(200).json(items);
+
+            })
+    });
