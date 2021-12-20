@@ -3,10 +3,8 @@ const express = require("express"),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcryptjs'),
     config = require('config'),
-
     mongoose = require("mongoose"),
     User = require("../services/database/models/user"),
-
     {check, validationResult} = require("express-validator");
 
 router.post('/',
@@ -53,6 +51,7 @@ router.post('/',
     }
 );
 
+
 router.get('/:ID' ,
     async (req , res ) => {
             let D = req.query.Page;
@@ -67,3 +66,22 @@ router.get('/:ID' ,
 
             })
     });
+
+
+//-------------------
+router.delete('/:id',
+    async(req,res) =>{
+            if(mongoose.isValidObjectId(req.params.id)){
+                    User.findByIdAndRemove(req.params.id).then(employee =>{
+                            if(employee){
+                                    return res.status(200).json({success:true,message:"the employee entry removed successfully"});
+                            } else{
+                                    return res.status(404).json({success:false,message:"employee entry is not removed"});
+                            }
+                    })
+            }
+            else {
+                    return res.status(400).send('Invalid Id');
+            }
+    });
+//----------------------
