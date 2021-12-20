@@ -2,17 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { store } from './app/store';
-import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+import ToggleColorMode from "./features/theme/ToggleColorMode";
+import {CssBaseline} from "@mui/material";
+import {AuthProvider} from "./features/auth/AuthContext";
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <AuthProvider>
+            <ToggleColorMode>
+                <CssBaseline/>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </ToggleColorMode>
+        </AuthProvider>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
