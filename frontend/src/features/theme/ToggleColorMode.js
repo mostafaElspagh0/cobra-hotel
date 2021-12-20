@@ -1,7 +1,7 @@
 import React, {createContext, useMemo, useState} from 'react';
 import {ThemeProvider} from "@emotion/react";
 import {createTheme, CssBaseline} from "@material-ui/core";
-import {amber, deepOrange, grey,green,} from "@material-ui/core/colors";
+import { deepOrange} from "@material-ui/core/colors";
 
 
 const ColorModeContext = createContext();

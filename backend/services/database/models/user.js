@@ -74,7 +74,6 @@ userModel.prototype.toJwtPayload = function() {
     const user = this.toObject();
     return {
         id: user._id.toString(),
-        name: user.name,
         job_type: user.job_type,
     };
 }
