@@ -50,7 +50,7 @@ const Nav = () => {
                     >
                         <CssBaseline>
                             <Box sx={{ display : 'flex' }}>
-                            <img src={logo} alt={logo} width={60}  />
+                                     <img src={logo} alt={logo} width={60}  />
                             </Box>
                         </CssBaseline>
                     </Typography>
@@ -97,7 +97,9 @@ const Nav = () => {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                     >
-                        LOGO
+                        <Box sx={{ display : 'flex' }}>
+                            <img src={logo} alt={logo} width={40}  />
+                        </Box>
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
