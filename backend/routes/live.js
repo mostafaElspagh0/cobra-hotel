@@ -3,7 +3,9 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.send('Live');
+    res.json({
+        live:true
+    });
 });
 
 module.exports = router;

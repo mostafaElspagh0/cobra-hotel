@@ -1,58 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
+import React, {Fragment, useContext, useEffect} from 'react';
+import SignInPage from "./features/auth/components/SignInPage";
+import {Route, Routes,useNavigate,useLocation} from "react-router-dom";
+import {AuthContext} from "./features/auth/AuthContext";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    const {isAuthenticated , user} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        if(!isAuthenticated && location.pathname !== '/login'){
+            navigate('/login');
+        }
+        if(isAuthenticated && location.pathname === '/login'){
+            navigate('/');
+        }
+    }, [isAuthenticated,location.pathname,navigator]);
+    return (
+        <Fragment>
+            <Routes>
+                <Route path="/login" element={<SignInPage />} />
+                <Route path="/" element={<div>{"fdfsf"}</div>} />
+            </Routes>
+        </Fragment>
+    );
 }
 
 export default App;
