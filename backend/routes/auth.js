@@ -3,14 +3,14 @@ const express = require("express"),
      jwt = require('jsonwebtoken'),
      bcrypt = require('bcryptjs'),
      config = require('config'),
-
-    mongoose = require("mongoose"),
-    User = require("../services/database/models/user"),
-
-     {check, validationResult} = require("express-validator");
+     mongoose = require("mongoose"),
+     User = require("../services/database/models/user"),
+     {check, validationResult} = require("express-validator"),
+     { isManager} = require("../services/auth/middlelayers/rolesMiddleLayer");
 
 router.post('/register',
     [
+        isManager,
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
         check('userName').isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
@@ -52,7 +52,6 @@ router.post('/register',
         }
     }
 );
-
 
 
 router.post('/login',
