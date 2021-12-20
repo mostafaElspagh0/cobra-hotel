@@ -1,10 +1,12 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import axios from "axios";
+import config from "../../config/config";
 const AuthContext = createContext();
 
 const AuthProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+
     function jwt_decode(token) {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -14,12 +16,29 @@ const AuthProvider = (props) => {
         return JSON.parse(jsonPayload);
     }
 
+    useEffect(() => {
+
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decoded = jwt_decode(token);
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp < currentTime) {
+                localStorage.removeItem("token");
+                setIsAuthenticated(false);
+                setUser(null);
+            } else {
+                setIsAuthenticated(true);
+                setUser(decoded);
+            }
+        }
+    }, []);
     const signIn = (email , password) => {
+        console.log(config)
         const data = {
             email,
             password
         };
-         axios.post("http://localhost:4000/auth/login", data)
+         axios.post(`${config.api_url}/auth/login`, data)
             .then(res => {
                 if(res.status === 200 && res.data.token) {
                     const decoded = jwt_decode(res.data.token);
@@ -33,12 +52,18 @@ const AuthProvider = (props) => {
                 console.log(err);
             });
     };
+    const signOut = () => {
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        setUser(null);
+    };
     return (
         <AuthContext.Provider value={
             {
                 isAuthenticated,
                 user,
-                signIn
+                signIn,
+                signOut
             }
         }>
             {props.children}
