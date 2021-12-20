@@ -1,11 +1,11 @@
 import React from 'react';
-import SignIn from "./features/auth/login/SignIn";
+import SignInPage from "./features/auth/components/SignInPage";
 import {CssBaseline, Paper} from "@mui/material";
 
 function App() {
     return (
         <div>
-            <SignIn/>
+            <SignInPage/>
         </div>
     );
 }
