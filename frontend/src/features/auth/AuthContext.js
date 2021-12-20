@@ -6,6 +6,9 @@ const AuthContext = createContext();
 const AuthProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState(null);
+    const [status, setStatus] = useState(null);
+    const [error, setError] = useState(null);
+
 
     function jwt_decode(token) {
         const base64Url = token.split('.')[1];
@@ -15,7 +18,9 @@ const AuthProvider = (props) => {
         }).join(''));
         return JSON.parse(jsonPayload);
     }
-
+    const dismissError = () => {
+        setStatus(null);
+    };
     useEffect(() => {
 
         const token = localStorage.getItem("token");
@@ -31,9 +36,9 @@ const AuthProvider = (props) => {
                 setUser(decoded);
             }
         }
-    }, []);
+    } , []);
     const signIn = (email , password) => {
-        console.log(config)
+        setStatus('loading');
         const data = {
             email,
             password
@@ -45,11 +50,17 @@ const AuthProvider = (props) => {
                     setIsAuthenticated(true);
                     localStorage.setItem("token", res.data.token);
                     setUser(decoded);
+                } else if ( res.status === 200 && !res.data.token && res.data.errors) {
+                    setStatus('error');
+                    setError(res.data.errors[0].msg);
+                } else {
+                    setStatus('error');
+                    setError("Something went wrong");
                 }
-                throw new Error("Invalid Credentials");
             })
             .catch(err => {
-                console.log(err);
+                setStatus('error');
+                setError(err.message);
             });
     };
     const signOut = () => {
@@ -63,7 +74,10 @@ const AuthProvider = (props) => {
                 isAuthenticated,
                 user,
                 signIn,
-                signOut
+                signOut,
+                status,
+                error,
+                dismissError
             }
         }>
             {props.children}
