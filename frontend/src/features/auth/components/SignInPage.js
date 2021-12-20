@@ -10,7 +10,7 @@ import {useContext} from "react";
 import {ColorModeContext} from "../../theme/ToggleColorMode";
 import {useForm, Controller} from "react-hook-form";
 
-const SignIn = (props) => {
+const SignInPage = (props) => {
     const {toggleColorMode} = useContext(ColorModeContext);
     const {handleSubmit, control} = useForm();
     const onSubmit = (data) => {
@@ -118,4 +118,4 @@ const SignIn = (props) => {
 
 }
 
-export default SignIn;
+export default SignInPage;
