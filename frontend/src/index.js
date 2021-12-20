@@ -5,13 +5,16 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import ToggleColorMode from "./features/theme/ToggleColorMode";
 import {CssBaseline} from "@mui/material";
+import {AuthProvider} from "./features/auth/AuthContext";
 
 ReactDOM.render(
     <React.StrictMode>
-        <ToggleColorMode>
-            <CssBaseline/>
-            <App/>
-        </ToggleColorMode>
+        <AuthProvider>
+            <ToggleColorMode>
+                <CssBaseline/>
+                <App/>
+            </ToggleColorMode>
+        </AuthProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

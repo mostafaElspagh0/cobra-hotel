@@ -9,12 +9,16 @@ import {AppBar} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext} from "../../theme/ToggleColorMode";
 import {useForm, Controller} from "react-hook-form";
+import {AuthContext} from "../AuthContext";
 
 const SignInPage = (props) => {
     const {toggleColorMode} = useContext(ColorModeContext);
     const {handleSubmit, control} = useForm();
+    const {
+        signIn
+    } = useContext(AuthContext);
     const onSubmit = (data) => {
-        console.log(data);
+        signIn(data.email, data.password);
     };
     return (
         <Container component="main" maxWidth="xs">
