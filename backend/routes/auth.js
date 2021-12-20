@@ -6,11 +6,12 @@ const express = require("express"),
      mongoose = require("mongoose"),
      User = require("../services/database/models/user"),
      {check, validationResult} = require("express-validator"),
-     { isManager} = require("../services/auth/middlelayers/rolesMiddleLayer");
-
+     { isManager,isHr} = require("../services/auth/middlelayers/rolesMiddleLayer");
+//-----register------
 router.post('/register',
     [
         isManager,
+        isHr,
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
         check('userName').isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
@@ -32,7 +33,6 @@ router.post('/register',
             password,
             phone,
             address
-
         });
         try {
             let userExist = await User.findOne({ email });
@@ -53,7 +53,7 @@ router.post('/register',
     }
 );
 
-
+//-----login------
 router.post('/login',
     [
         check('email', 'Please include a valid email').isEmail(),
