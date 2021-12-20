@@ -18,5 +18,37 @@ router.post('/',
         check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']),
         check('phone').isLength({min:11,max:11}).isNumeric,
     ],
+    async (req, res) => {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                    return res.status(400).json({ errors: errors.array() });
+            }
+            let { name,userNme,job_type, email, password,phone, address } = req.body;
+            const user = new user({
+                    name,
+                    userNme,
+                    job_type,
+                    email,
+                    password,
+                    phone,
+                    address
 
+            });
+            try {
+                    let userExist = await User.findOne({ email });
+                    if (userExist) {
+                            return res
+                                .status(400)
+                                .json({ errors: [{ msg: 'User already exists' }] });
+                    }
+                    await user.save();
+                    const userObj=user.toObject();
+                    delete userObj.password;
+                    res.json({msg:'User created',user : userObj });
+            }
+            catch (err) {
+                    console.error(err.message);
+                    res.status(500).send('Server Error');
+            }
+    }
 );
