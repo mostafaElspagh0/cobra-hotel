@@ -6,13 +6,16 @@ import * as serviceWorker from './serviceWorker';
 import ToggleColorMode from "./features/theme/ToggleColorMode";
 import {CssBaseline} from "@mui/material";
 import {AuthProvider} from "./features/auth/AuthContext";
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
     <React.StrictMode>
         <AuthProvider>
             <ToggleColorMode>
                 <CssBaseline/>
-                <App/>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
             </ToggleColorMode>
         </AuthProvider>
     </React.StrictMode>,
