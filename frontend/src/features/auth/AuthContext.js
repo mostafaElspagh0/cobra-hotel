@@ -4,25 +4,24 @@ import config from "../../config/config";
 const AuthContext = createContext();
 
 const AuthProvider = (props) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const isAuth = () => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decoded = jwt_decode(token);
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp < currentTime) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    };
+    const [isAuthenticated, setIsAuthenticated] = useState(isAuth());
     const [user, setUser] = useState(null);
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
-
-
-    function jwt_decode(token) {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-    }
-    const dismissError = () => {
-        setStatus(null);
-    };
     useEffect(() => {
-
         const token = localStorage.getItem("token");
         if (token) {
             const decoded = jwt_decode(token);
@@ -36,7 +35,26 @@ const AuthProvider = (props) => {
                 setUser(decoded);
             }
         }
-    } , []);
+    } , [Navigator]);
+    const getRole = () => {
+        if (user) {
+            return user.user.job_type;
+        }
+        return null;
+    };
+
+    function jwt_decode(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+    const dismissError = () => {
+        setStatus(null);
+    };
+
     const signIn = (email , password) => {
         setStatus('loading');
         const data = {
@@ -77,7 +95,8 @@ const AuthProvider = (props) => {
                 signOut,
                 status,
                 error,
-                dismissError
+                dismissError,
+                getRole
             }
         }>
             {props.children}
