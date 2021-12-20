@@ -3,7 +3,7 @@ import SignInPage from "./features/auth/components/SignInPage";
 import {Route, Routes,useNavigate,useLocation} from "react-router-dom";
 import {AuthContext} from "./features/auth/AuthContext";
 function App() {
-    const {isAuthenticated , user} = useContext(AuthContext);
+    const {isAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     useEffect(() => {
@@ -13,7 +13,7 @@ function App() {
         if(isAuthenticated && location.pathname === '/login'){
             navigate('/');
         }
-    }, [isAuthenticated,location.pathname,navigator]);
+    }, [isAuthenticated,location.pathname,navigate]);
     return (
         <Fragment>
             <Routes>

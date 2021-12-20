@@ -4,16 +4,17 @@ import logo from '../../../common/logo.svg';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Switch} from "@material-ui/core";
-import {AppBar} from "@mui/material";
+import {CircularProgress, IconButton, Switch} from "@material-ui/core";
+import {Alert, AppBar} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext} from "../../theme/ToggleColorMode";
 import {useForm, Controller} from "react-hook-form";
 import {AuthContext} from "../AuthContext";
-
+import CloseIcon from '@mui/icons-material/Close';
 const SignInPage = (props) => {
     const {toggleColorMode} = useContext(ColorModeContext);
     const {handleSubmit, control} = useForm();
+    const {status , error, dismissError} = useContext(AuthContext);
     const {
         signIn
     } = useContext(AuthContext);
@@ -54,6 +55,8 @@ const SignInPage = (props) => {
                                 variant="outlined"
                                 fullWidth
                                 required
+                                disabled={status === 'loading'}
+
                                 value={value}
                                 margin={'normal'}
                                 onChange={onChange}
@@ -79,6 +82,7 @@ const SignInPage = (props) => {
                                 label="Password"
                                 variant="outlined"
                                 fullWidth
+                                disabled={status === 'loading'}
                                 required
                                 margin={'normal'}
                                 value={value}
@@ -93,11 +97,34 @@ const SignInPage = (props) => {
                             minLength: {value: 8, message: 'Password must be at least 8 characters'}
                         }}
                     />
+                    {status === 'error' && (
+                        <Alert
+                            severity="error"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => dismissError()}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            }
+                        >
+                            {error}
+                        </Alert>
+
+                    )}
+                    {status === 'loading' && (
+                        <CircularProgress/>
+                    )}
 
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
+                        disabled={status === 'loading'}
+
                         sx={{mt: 3, mb: 2}}
                     >
                         Sign In
@@ -109,6 +136,8 @@ const SignInPage = (props) => {
                             href="/signup"
                             variant="text"
                             color="primary"
+                            disabled={status === 'loading'}
+
                             sx={{ml: 2}}
                         >
                             Forgot password?
