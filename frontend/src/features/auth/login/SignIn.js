@@ -8,10 +8,14 @@ import {Switch} from "@material-ui/core";
 import {AppBar} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext} from "../../theme/ToggleColorMode";
-
+import {useForm, Controller} from "react-hook-form";
 
 const SignIn = (props) => {
     const {toggleColorMode} = useContext(ColorModeContext);
+    const {handleSubmit, control} = useForm();
+    const onSubmit = (data) => {
+        console.log(data);
+    };
     return (
         <Container component="main" maxWidth="xs">
             <AppBar>
@@ -35,27 +39,55 @@ const SignIn = (props) => {
                 <img src={logo} alt="logo" width="150" height="150" style={{
                     margin: '10px'
                 }}/>
-                <Box component="form" onSubmit={() => {
-                }} noValidate sx={{mt: 1}}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
+                    <Controller
                         name="email"
-                        autoComplete="email"
-                        autoFocus
+                        control={control}
+                        defaultValue=""
+                        render={({field: {onChange, value}, fieldState: {error}}) => (
+                            <TextField
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                required
+                                value={value}
+                                margin={'normal'}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                type="email"
+                            />
+                        )}
+                        rules={{
+                            required: 'Email required',
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                message: 'invalid email address'
+                            }
+                        }}
                     />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
+                    <Controller
                         name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
+                        control={control}
+                        defaultValue=""
+                        render={({field: {onChange, value}, fieldState: {error}}) => (
+                            <TextField
+                                label="Password"
+                                variant="outlined"
+                                fullWidth
+                                required
+                                margin={'normal'}
+                                value={value}
+                                onChange={onChange}
+                                error={!!error}
+                                helperText={error ? error.message : null}
+                                type="password"
+                            />
+                        )}
+                        rules={{
+                            required: 'Password required',
+                            minLength: {value: 8, message: 'Password must be at least 8 characters'}
+                        }}
                     />
 
                     <Button
@@ -71,8 +103,9 @@ const SignIn = (props) => {
                         <Button
                             component="a"
                             href="/signup"
-                            variant="body2"
+                            variant="text"
                             color="primary"
+                            sx={{ml: 2}}
                         >
                             Forgot password?
                         </Button>
