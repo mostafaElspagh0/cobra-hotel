@@ -1,7 +1,8 @@
 import {AuthContext} from "../../auth/AuthContext";
-import {Navigate} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
 import {useState} from "react";
+import Grid from "@mui/material/Grid";
 
 const {useContext} = require("react");
 
@@ -18,49 +19,49 @@ const DashBoardPage = () => {
             // path should be unique
             'Employee': {
                 name: "Employee",
-                path: "/Employee",
+                path: "Employee",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Announcement': {
                 name: "Announcement",
-                path: "/Announcement",
+                path: "Announcement",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Send E-mail': {
                 name: "Send E-mail",
-                path: "/Send E-mail",
+                path: "Send E-mail",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Orders': {
                 name: "Orders",
-                path: "/Orders",
+                path: "Orders",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Storage': {
                 name: "Storage",
-                path: "/Storage",
+                path: "Storage",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Arrival': {
                 name: "Arrival",
-                path: "/Arrival",
+                path: "Arrival",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Cleaning': {
                 name: "Cleaning",
-                path: "/Cleaning",
+                path: "Cleaning",
                 component: () => {
                     return <div>Dashboard</div>
                 }
@@ -104,7 +105,7 @@ const DashBoardPage = () => {
                 return [];
         }
         return ret.map(page => {
-            console.log(page.path , activePage);
+            console.log(page.path, activePage);
             return {
                 name: page.name,
                 path: page.path,
@@ -115,7 +116,10 @@ const DashBoardPage = () => {
     }
     return (
         <div>
-            <Nav pages={getPages(getRole())} activePage={activePage}/>
+            <Grid minHeight="100vh">
+                <Nav pages={getPages(getRole())} activePage={activePage}/>
+                <Outlet/>
+            </Grid>
         </div>
     )
 }
