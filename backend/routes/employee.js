@@ -7,10 +7,9 @@ const express = require("express"),
     User = require("../services/database/models/user"),
     {check, validationResult} = require("express-validator");
 const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
-
+router.use(isA(["Hr","Manger"]));
 router.post('/',
     [
-        isA(["Hr","Manger"]),
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }),
@@ -30,7 +29,6 @@ router.post('/',
                     password,
                     phone,
                     address
-
             });
             try {
                     let userExist = await User.findOne({ email });
