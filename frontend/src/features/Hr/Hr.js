@@ -44,7 +44,6 @@ const rows = [
 
         return(
         <Fragment>
-            <Nav />
 
 
             <Search />
