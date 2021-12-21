@@ -1,24 +1,26 @@
 import {createContext, useEffect, useState} from "react";
 import axios from "axios";
 import config from "../../config/config";
+
 const AuthContext = createContext();
 
 const AuthProvider = (props) => {
-    const isAuth = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
             const decoded = jwt_decode(token);
             const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                return false;
-            } else {
-                return true;
-            }
+            return decoded.exp >= currentTime;
         }
         return false;
-    };
-    const [isAuthenticated, setIsAuthenticated] = useState(isAuth());
-    const [user, setUser] = useState(null);
+    });
+    const [user, setUser] = useState(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            return jwt_decode(token);
+        }
+        return null;
+    });
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
     useEffect(() => {
@@ -35,40 +37,42 @@ const AuthProvider = (props) => {
                 setUser(decoded);
             }
         }
-    } , [Navigator]);
+    }, [isAuthenticated]);
     const getRole = () => {
         if (user) {
             return user.user.job_type;
         }
         return null;
     };
-
     function jwt_decode(token) {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            return null;
+        }
     }
     const dismissError = () => {
         setStatus(null);
     };
-
-    const signIn = (email , password) => {
+    const signIn = (email, password) => {
         setStatus('loading');
         const data = {
             email,
             password
         };
-         axios.post(`${config.api_url}/auth/login`, data)
+        axios.post(`${config.api_url}/auth/login`, data)
             .then(res => {
-                if(res.status === 200 && res.data.token) {
+                if (res.status === 200 && res.data.token) {
                     const decoded = jwt_decode(res.data.token);
                     setIsAuthenticated(true);
                     localStorage.setItem("token", res.data.token);
                     setUser(decoded);
-                } else if ( res.status === 200 && !res.data.token && res.data.errors) {
+                } else if (res.status === 200 && !res.data.token && res.data.errors) {
                     setStatus('error');
                     setError(res.data.errors[0].msg);
                 } else {
