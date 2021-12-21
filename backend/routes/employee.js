@@ -14,7 +14,7 @@ router.post('/',
         check('email', 'Please include a valid email').isEmail(),
         check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }),
         check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']),
-        check('phone').isLength({min:11,max:11}).isNumeric,
+        check('phone').isLength({min:11,max:11}).isNumeric(),
     ],
     async (req, res) => {
             const errors = validationResult(req);
