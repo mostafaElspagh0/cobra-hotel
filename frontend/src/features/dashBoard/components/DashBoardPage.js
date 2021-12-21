@@ -1,14 +1,13 @@
 import {AuthContext} from "../../auth/AuthContext";
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
-import {useState} from "react";
 import Grid from "@mui/material/Grid";
-
 const {useContext} = require("react");
 
 const DashBoardPage = () => {
     const {isAuthenticated, getRole} = useContext(AuthContext);
     const location = useLocation();
+    const activePagePath = decodeURI(location.pathname).split('/')[2];
     if (!isAuthenticated) {
         return <Navigate to="/login"/>
     }
@@ -105,7 +104,7 @@ const DashBoardPage = () => {
                 return [];
         }
         // decode the url
-        const activePagePath = decodeURI(location.pathname).split('/')[2];
+
         return ret.map(page => {
             return {
                 name: page.name,
@@ -119,7 +118,7 @@ const DashBoardPage = () => {
     return (
         <div>
             <Grid minHeight="100vh">
-                <Nav pages={getPages(getRole()) }/>
+                <Nav pages={getPages(getRole())} currentPage={activePagePath}/>
                 <Outlet/>
             </Grid>
         </div>
