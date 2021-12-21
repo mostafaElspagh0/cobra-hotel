@@ -21,7 +21,7 @@ router.post('/',
                     return res.status(400).json({ errors: errors.array() });
             }
             let { name,job_type, email, password,phone, address } = req.body;
-            const user = new user({
+            const user = new User({
                     name,
                     job_type,
                     email,
@@ -49,7 +49,7 @@ router.post('/',
 );
 
 //-------getById
-router.get('/:ID' ,
+router.get('/:id' ,
     async (req , res ) => {
             try {
                     const  id = req.params.id;
@@ -57,7 +57,7 @@ router.get('/:ID' ,
                     if(!user){
                             return res.status(404).json({msg:'User not found'})
                     }
-                    const userObj = user.toObjerct();
+                    const userObj = user.toObject();
                     delete userObj.password;
                     res.json({user:userObj});
             }catch (err){
@@ -87,11 +87,11 @@ router.delete('/:id',
 //-------put
 router.put('/:id',
     [
-            check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty().optional,
-            check('email', 'Please include a valid email').isEmail().optional,
-            check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }).optional,
-            check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']).optional,
-            check('phone').isLength({min:11,max:11}).isNumeric().optional,
+            check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty().optional(),
+            check('email', 'Please include a valid email').isEmail().optional(),
+            check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }).optional(),
+            check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']).optional(),
+            check('phone').isLength({min:11,max:11}).isNumeric().optional(),
     ],
     async (req , res ) => {
             try{

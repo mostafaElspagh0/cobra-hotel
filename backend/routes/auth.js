@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const User = require("../services/database/models/user");
 const {check, validationResult} = require("express-validator");
-const { isManager,isHr} = require("../services/auth/middlelayers/rolesMiddleLayer");
 
 //-----login------
 router.post('/login',
@@ -26,7 +25,7 @@ router.post('/login',
                     .status(200)
                     .json({ errors: [{ msg: 'Invalid credentials' }] });
             }
-            const isMatch = await bcrypt.compare(password, User.password);
+            const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return res
                     .status(200)
