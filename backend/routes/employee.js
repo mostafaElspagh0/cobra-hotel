@@ -8,6 +8,8 @@ const express = require("express"),
     {check, validationResult} = require("express-validator");
 const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
 router.use(isA(["Hr","Manger"]));
+
+//-------post
 router.post('/',
     [
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
@@ -67,6 +69,7 @@ router.get('/:ID' ,
             }
 
     });
+
 //-------deleteById
 router.delete('/:id',
     async (req , res ) => {

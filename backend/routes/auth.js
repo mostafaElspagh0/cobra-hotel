@@ -1,11 +1,12 @@
-const express = require("express"),
-     router = express.Router(),
-     jwt = require('jsonwebtoken'),
-     bcrypt = require('bcryptjs'),
-     config = require('config'),
-     User = require("../services/database/models/user"),
-     {check, validationResult} = require("express-validator"),
-     { isManager,isHr} = require("../services/auth/middlelayers/rolesMiddleLayer");
+const express = require("express");
+const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const config = require('config');
+const User = require("../services/database/models/user");
+const {check, validationResult} = require("express-validator");
+const { isManager,isHr} = require("../services/auth/middlelayers/rolesMiddleLayer");
+
 //-----login------
 router.post('/login',
     [
