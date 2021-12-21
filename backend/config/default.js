@@ -11,4 +11,5 @@ module.exports = {
   "jwtSecret":"Secret Secret",
   "SALT_WORK_FACTOR" : 10 ,
   "corsOrigin":"http://localhost:3000",
+  "perPage":10,
 };
