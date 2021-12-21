@@ -1,15 +1,12 @@
-const express = require("express"),
-     router = express.Router(),
-     jwt = require('jsonwebtoken'),
-     bcrypt = require('bcryptjs'),
-     config = require('config'),
+const express = require("express");
+const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const config = require('config');
+const User = require("../services/database/models/user");
+const {check, validationResult} = require("express-validator");
 
-    mongoose = require("mongoose"),
-    User = require("../services/database/models/user"),
-
-     {check, validationResult} = require("express-validator");
-
-
+//-----login------
 router.post('/login',
     [
         check('email', 'Please include a valid email').isEmail(),

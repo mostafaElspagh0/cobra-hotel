@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import logo from '../../../common/logo.svg';
+import logo from '../../../common/resoursces/logo.svg';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -9,18 +9,24 @@ import {Alert, AppBar} from "@mui/material";
 import {useContext} from "react";
 import {ColorModeContext} from "../../theme/ToggleColorMode";
 import {useForm, Controller} from "react-hook-form";
-import {AuthContext} from "../AuthContext";
 import CloseIcon from '@mui/icons-material/Close';
-const SignInPage = (props) => {
+import { Navigate } from 'react-router-dom';
+import {AuthContext} from "../AuthContext";
+
+const SignInPage = () => {
     const {toggleColorMode} = useContext(ColorModeContext);
     const {handleSubmit, control} = useForm();
-    const {status , error, dismissError} = useContext(AuthContext);
+    const {status, error, dismissError} = useContext(AuthContext);
     const {
-        signIn
+        signIn,
+        isAuthenticated
     } = useContext(AuthContext);
     const onSubmit = (data) => {
         signIn(data.email, data.password);
     };
+    if(isAuthenticated){
+        return <Navigate to="/"/>
+    }
     return (
         <Container component="main" maxWidth="xs">
             <AppBar>
@@ -107,7 +113,7 @@ const SignInPage = (props) => {
                                     size="small"
                                     onClick={() => dismissError()}
                                 >
-                                    <CloseIcon />
+                                    <CloseIcon/>
                                 </IconButton>
                             }
                         >
