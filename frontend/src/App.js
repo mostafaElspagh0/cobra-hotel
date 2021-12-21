@@ -1,24 +1,15 @@
-import React, {Fragment, useContext, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import SignInPage from "./features/auth/components/SignInPage";
-import {Route, Routes,useNavigate,useLocation} from "react-router-dom";
-import {AuthContext} from "./features/auth/AuthContext";
+import {Route, Routes} from "react-router-dom";
+import DashBoardPage from "./features/dashBoard/components/DashBoardPage";
 function App() {
-    const {isAuthenticated } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-    useEffect(() => {
-        if(!isAuthenticated && location.pathname !== '/login'){
-            navigate('/login');
-        }
-        if(isAuthenticated && location.pathname === '/login'){
-            navigate('/');
-        }
-    }, [isAuthenticated,location.pathname,navigate]);
     return (
         <Fragment>
             <Routes>
                 <Route path="/login" element={<SignInPage />} />
-                <Route path="/" element={<div>{"fdfsf"}</div>} />
+                <Route path="/dashboard/*" element={<DashBoardPage/>} />
+                <Route path="/" element={<DashBoardPage/>} />
+
             </Routes>
         </Fragment>
     );
