@@ -72,6 +72,7 @@ const AuthProvider = (props) => {
                     setIsAuthenticated(true);
                     localStorage.setItem("token", res.data.token);
                     setUser(decoded);
+                    setStatus('success');
                 } else if (res.status === 200 && !res.data.token && res.data.errors) {
                     setStatus('error');
                     setError(res.data.errors[0].msg);
