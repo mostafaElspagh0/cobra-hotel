@@ -68,27 +68,21 @@ router.get('/:ID' ,
                     res.status(500).send('Server Error')
             }
 
-            })
     });
-
-
-//-------------------
+//-------deleteById
 router.delete('/:id',
-    async(req,res) =>{
-            if(mongoose.isValidObjectId(req.params.id)){
-                    User.findByIdAndRemove(req.params.id).then(employee =>{
-                            if(employee){
-                                    return res.status(200).json({success:true,message:"the employee entry removed successfully"});
-                            } else{
-                                    return res.status(404).json({success:false,message:"employee entry is not removed"});
-                            }
-                    })
-            }
-            else {
-                    return res.status(400).send('Invalid Id');
+    async (req , res ) => {
+            try {
+                    const  id = req.params.id;
+                    const user =await User.findById(id)
+                    if(!user){
+                            return res.status(404).json({msg:'User not found'})
+                    }
+                    await user.remove();
+                    res.json({msg:'User removed'});
+            }catch (err){
+                    console.log(err.message);
+                    res.status(500).send('Server Error')
             }
     });
-//----------------------
-
-
 module.exports= router;
