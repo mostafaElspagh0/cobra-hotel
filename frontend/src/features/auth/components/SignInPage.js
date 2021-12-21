@@ -14,7 +14,7 @@ import { Navigate } from 'react-router-dom';
 import {AuthContext} from "../AuthContext";
 
 const SignInPage = () => {
-    const {toggleColorMode} = useContext(ColorModeContext);
+    const {toggleColorMode,isDark} = useContext(ColorModeContext);
     const {handleSubmit, control} = useForm();
     const {status, error, dismissError} = useContext(AuthContext);
     const {
@@ -35,7 +35,9 @@ const SignInPage = () => {
                         alignSelf: 'flex-end',
                     }
                 }>
-                    <Switch onChange={(e) => toggleColorMode()}/>
+                    <Switch
+                        checked={isDark()}
+                        onChange={(e) => toggleColorMode()}/>
                 </Box>
             </AppBar>
             <Box
