@@ -4,6 +4,7 @@ import Nav from '../../common/components/Nav';
 import {Fragment} from "react";
 import Search from "../../common/components/Search"
 import { DataGrid } from '@mui/x-data-grid';
+import Grid from "@mui/material/Grid";
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -45,22 +46,30 @@ const rows = [
         return(
         <Fragment>
 
+            <Grid
+                Container container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                spacing={5}
+            >
+            <Grid item ></Grid>
+                <Grid item >
+                    <Search />
+                </Grid>
+                <Grid item >
+                    <div style={{ height: '100vh', width: '90vw' }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            pageSize={12}
+                            rowsPerPageOptions={[5]}
+                            checkboxSelection
+                        />
+                    </div>
+                </Grid>
+                        </Grid>
 
-            <Search />
-            <Container>
-
-
-                <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                    />
-                </div>
-
-            </Container>
         </Fragment>
     );
 }
