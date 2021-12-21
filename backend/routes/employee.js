@@ -83,4 +83,55 @@ router.delete('/:id',
                     res.status(500).send('Server Error')
             }
     });
+
+//-------put
+router.put('/:id',
+    [
+            check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty().optional,
+            check('email', 'Please include a valid email').isEmail().optional,
+            check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }).optional,
+            check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']).optional,
+            check('phone').isLength({min:11,max:11}).isNumeric().optional,
+    ],
+    async (req , res ) => {
+            try{
+                const errors = validationResult(req);
+                if(!errors.isEmpty()){
+                        return res.status(400).json({errors:errors.array()});
+                }
+                let{name,job_type,email,password,phone,address}=req.body;
+                const user = await User.findById(req.params.id);
+                if(!user){
+                        return res.status(404).json({msg:'User Not Found'});
+                }
+                if(name){
+                        user.name=name;
+                }
+                if(job_type){
+                        user.job_type=job_type
+                }
+                if(email){
+                        user.email=email
+                }
+                if(password){
+                        user.password=password
+                }
+                if(phone){
+                        user.phone=phone
+                }
+                if(address){
+                        user.address=address
+                }
+
+                await user.save();
+                const userObj = user.toObject() ;
+                delete userObj.password;
+                res.json({msg:'User is updated',user:userObj});
+            }catch (err){
+                    console.error(err.message);
+                    res.status(500).send('Server Error');
+            }
+    })
+
+
 module.exports= router;
