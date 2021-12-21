@@ -131,7 +131,16 @@ router.put('/:id',
                     console.error(err.message);
                     res.status(500).send('Server Error');
             }
-    })
+    });
+
+//-------pagination
+router.get("/",
+    async (req,res)=>{
+    const perPage = req.query.perPage * 1 || config.get('perPage')*1;
+    const page = req.query.page * 1 || 0 ;
+    let users = await User.find().limit(perPage).skip(perPage * page);
+    return res.json(users);
+    });
 
 
 module.exports= router;
