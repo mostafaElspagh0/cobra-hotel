@@ -6,9 +6,11 @@ const express = require("express"),
     mongoose = require("mongoose"),
     User = require("../services/database/models/user"),
     {check, validationResult} = require("express-validator");
+const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
 
 router.post('/',
     [
+        isA(["Hr","Manger"]),
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
         check('userName').isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
