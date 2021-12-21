@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,15 +12,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../resoursces/logo.svg'
 import {CssBaseline} from "@mui/material";
-import avat from '../resoursces/avat.png';
+import avatar from '../resoursces/avat.png';
+import {useState} from "react";
+import PropTypes from 'prop-types';
 
-const pages = ['Employee', 'Announcment', 'Send E-mail', 'Orders' , 'Storage' , 'Arrival' , 'Cleaning'];
+
+//const pages = ['Employee', 'Announcement', 'Send E-mail', 'Orders' , 'Storage' , 'Arrival' , 'Cleaning'];
 const settings = [ 'Dashboard', 'Logout'];
 
-const Nav = () => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+const Nav = ({pages}) => {
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -85,8 +86,8 @@ const Nav = () => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                                    <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -104,11 +105,11 @@ const Nav = () => {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
                             <Button
-                                key={page}
+                                key={page.name}
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {page}
+                                {page.name}
                             </Button>
                         ))}
                     </Box>
@@ -116,7 +117,7 @@ const Nav = () => {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src={avat} />
+                                <Avatar alt="Remy Sharp" src={avatar} />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -148,4 +149,16 @@ const Nav = () => {
 
     );
 };
+
+
+
+Nav.prototype = {
+    pages: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+        path: PropTypes.string,
+        component: PropTypes.func,
+    })).isRequired,
+};
+
+
 export default Nav;
