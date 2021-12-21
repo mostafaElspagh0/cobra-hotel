@@ -13,36 +13,33 @@ import MenuItem from '@mui/material/MenuItem';
 import logo from '../resoursces/logo.svg'
 import {CssBaseline} from "@mui/material";
 import avatar from '../resoursces/avat.png';
-import {useState} from "react";
+import {useContext, useState} from "react";
 import PropTypes from 'prop-types';
 import {ButtonGroup} from "@material-ui/core";
-import {Link,useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {AuthContext} from "../../features/auth/AuthContext";
+import {ColorModeContext} from "../../features/theme/ToggleColorMode";
+import Switch from "@material-ui/core/Switch";
 
-
-//const pages = ['Employee', 'Announcement', 'Send E-mail', 'Orders' , 'Storage' , 'Arrival' , 'Cleaning'];
-const settings = ['Dashboard', 'Logout'];
-
-const Nav = ({pages}) => {
+const Nav = ({pages, currentPage}) => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const {toggleColorMode,isDark} = useContext(ColorModeContext);
     const navigate = useNavigate();
+    const {signOut} = useContext(AuthContext);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-
     return (
-
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -58,7 +55,7 @@ const Nav = ({pages}) => {
                             </Box>
                         </CssBaseline>
                     </Typography>
-
+                    {/*small screen*/}
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
                             size="large"
@@ -89,7 +86,10 @@ const Nav = ({pages}) => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page.name} onClick={() => {
+                                    handleCloseNavMenu();
+                                    navigate(page.path, {replace: false});
+                                }}>
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
                             ))}
@@ -102,12 +102,12 @@ const Nav = ({pages}) => {
                         sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}
                     >
                         <Box sx={{display: 'flex'}}>
-                            <img src={logo} alt={logo} width={40}/>
+                            {currentPage}
                         </Box>
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <ButtonGroup
-                        disableElevation>
+                            disableElevation>
                             {pages.map((page) => (
                                 <Button
                                     key={page.name}
@@ -115,8 +115,7 @@ const Nav = ({pages}) => {
                                     color={page.isActive ? 'warning' : 'inherit'}
                                     onClick={() => {
                                         handleCloseNavMenu();
-                                        navigate(page.path,{replace: false});
-
+                                        navigate(page.path, {replace: false});
                                     }}
                                     sx={{my: 2, color: 'white', display: 'block'}}
                                 >
@@ -149,11 +148,19 @@ const Nav = ({pages}) => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
+
+                            <MenuItem>
+                                <Switch
+                                    checked={isDark()}
+                                    onChange={(e) => toggleColorMode()}/>
+                            </MenuItem>
+                            <MenuItem>
+                                <Button onClick={() => {
+                                    signOut();
+                                }}>Logout</Button>
+                            </MenuItem>
+
+
                         </Menu>
                     </Box>
                 </Toolbar>
@@ -171,6 +178,7 @@ Nav.prototype = {
         component: PropTypes.func,
         isActive: PropTypes.bool,
     })).isRequired,
+    currentPage: PropTypes.string.isRequired,
 };
 
 
