@@ -1,11 +1,8 @@
-const express = require("express"),
-    router = express.Router(),
-    jwt = require('jsonwebtoken'),
-    bcrypt = require('bcryptjs'),
-    config = require('config'),
-    mongoose = require("mongoose"),
-    User = require("../services/database/models/user"),
-    {check, validationResult} = require("express-validator");
+const express = require("express");
+const router = express.Router();
+const config = require('config');
+const User = require("../services/database/models/user");
+const {check, validationResult} = require("express-validator");
 const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
 router.use(isA(["Hr","Manger"]));
 
