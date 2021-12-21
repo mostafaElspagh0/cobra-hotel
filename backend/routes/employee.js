@@ -12,7 +12,6 @@ router.post('/',
     [
         isA(["Hr","Manger"]),
         check('name', 'Name is required') .isLength({min:3,max:25}).notEmpty(),
-        check('userName').isEmpty(),
         check('email', 'Please include a valid email').isEmail(),
         check('password','Please enter a password with 6 or more characters').exists().isLength({ min: 5 }),
         check('job_type', 'job type is required to be null').isIn(['Manager', 'Hr','Receptionist', 'Barista']),
@@ -23,10 +22,9 @@ router.post('/',
             if (!errors.isEmpty()) {
                     return res.status(400).json({ errors: errors.array() });
             }
-            let { name,userNme,job_type, email, password,phone, address } = req.body;
+            let { name,job_type, email, password,phone, address } = req.body;
             const user = new user({
                     name,
-                    userNme,
                     job_type,
                     email,
                     password,
