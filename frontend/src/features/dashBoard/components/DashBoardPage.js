@@ -1,5 +1,5 @@
 import {AuthContext} from "../../auth/AuthContext";
-import {Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet, useLocation} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
 import {useState} from "react";
 import Grid from "@mui/material/Grid";
@@ -8,12 +8,12 @@ const {useContext} = require("react");
 
 const DashBoardPage = () => {
     const {isAuthenticated, getRole} = useContext(AuthContext);
-    const [activePage, setActivePage] = useState("/Announcement");
-    console.log(activePage);
+    const location = useLocation();
     if (!isAuthenticated) {
         return <Navigate to="/login"/>
     }
     const getPages = (role, activePage) => {
+        // TODO: refactor this can done in a better way
         const pages = {
             // path should be same as the path in the url
             // path should be unique
@@ -104,12 +104,14 @@ const DashBoardPage = () => {
             default:
                 return [];
         }
+        // decode the url
+        const activePagePath = decodeURI(location.pathname).split('/')[2];
         return ret.map(page => {
-            console.log(page.path, activePage);
             return {
                 name: page.name,
                 path: page.path,
                 component: page.component,
+                isActive: page.path === activePagePath
             }
         });
 
@@ -117,7 +119,7 @@ const DashBoardPage = () => {
     return (
         <div>
             <Grid minHeight="100vh">
-                <Nav pages={getPages(getRole())} activePage={activePage}/>
+                <Nav pages={getPages(getRole()) }/>
                 <Outlet/>
             </Grid>
         </div>
