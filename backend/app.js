@@ -6,6 +6,7 @@ const liveRouter = require('./routes/live');
 const authRouter = require('./routes/auth');
 const bodyParser = require("body-parser");
 const app = express();
+const employeeRouter=require('./routes/employee');
 
 app.use(logger('dev'));
 app.use(cors({
@@ -19,6 +20,6 @@ app.use('/', liveRouter);
 app.use('/live', liveRouter);
 app.use('/auth',authRouter);
 
-
+app.use('/employee',employeeRouter);
 
 module.exports = app;
