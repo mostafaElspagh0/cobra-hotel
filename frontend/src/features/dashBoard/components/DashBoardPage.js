@@ -1,16 +1,21 @@
 import {AuthContext} from "../../auth/AuthContext";
 import {Navigate} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
+import {useState} from "react";
 
 const {useContext} = require("react");
 
 const DashBoardPage = () => {
     const {isAuthenticated, getRole} = useContext(AuthContext);
+    const [activePage, setActivePage] = useState("/Announcement");
+    console.log(activePage);
     if (!isAuthenticated) {
         return <Navigate to="/login"/>
     }
-    const getPages = (role) => {
+    const getPages = (role, activePage) => {
         const pages = {
+            // path should be same as the path in the url
+            // path should be unique
             'Employee': {
                 name: "Employee",
                 path: "/Employee",
@@ -61,9 +66,10 @@ const DashBoardPage = () => {
                 }
             }
         };
+        let ret = [];
         switch (role) {
             case 'Manager':
-                return [
+                ret = [
                     pages['Employee'],
                     pages['Announcement'],
                     pages['Send E-mail'],
@@ -72,34 +78,44 @@ const DashBoardPage = () => {
                     pages['Arrival'],
                     pages['Cleaning']
                 ];
+                break;
             case 'Hr':
-                return [
+                ret = [
                     pages['Employee'],
                     pages['Announcement'],
                     pages['Send E-mail'],
                 ];
+                break;
             case 'Receptionist':
-                return [
+                ret = [
                     pages['Orders'],
                     pages['Storage'],
                     pages['Arrival'],
                     pages['Cleaning']
                 ];
-
+                break;
             case 'Barista':
-                return [
+                ret = [
                     pages['Orders'],
                     pages['Storage'],
                 ];
+                break;
             default:
                 return [];
-
         }
+        return ret.map(page => {
+            console.log(page.path , activePage);
+            return {
+                name: page.name,
+                path: page.path,
+                component: page.component,
+            }
+        });
 
     }
     return (
         <div>
-            <Nav pages={getPages(getRole())}/>
+            <Nav pages={getPages(getRole())} activePage={activePage}/>
         </div>
     )
 }
