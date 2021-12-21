@@ -10,11 +10,7 @@ const userScheme = new Schema(
             minlength: 3,
             maxlength: 25
         },
-        userName : {
-            type : String,
-            required: true,
-            unique: true
-        },
+
         job_type : {
             type : String ,
             required:true,
@@ -30,9 +26,7 @@ const userScheme = new Schema(
         },
         password: {
             type: String,
-            required: true,
-            minlength: 5,
-            maxlength: 50
+            required: true
         },
         phone: {
             type: String,

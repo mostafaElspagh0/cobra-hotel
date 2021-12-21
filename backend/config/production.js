@@ -6,4 +6,6 @@ module.exports = {
     "jwtSecret": process.env.JWT_SECRET,
     "SALT_WORK_FACTOR" : process.env.SALT_WORK_FACTOR,
     "corsOrigin": process.env.FRONTEND_ORIGIN,
+    "perPage":10,
+
 };
