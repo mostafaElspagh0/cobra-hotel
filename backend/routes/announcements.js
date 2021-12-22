@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const config = require('config');
 const Announcement = require("../services/database/models/announcement");
 const {check, validationResult} = require("express-validator");
 const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
@@ -118,6 +119,15 @@ router.put('/:id',
             console.error(err.message);
             res.status(500).send('Server Error');
         }
+    });
+
+//-------pagination
+router.get("/",
+    async (req,res)=>{
+        const perPage = req.query.perPage * 1 || config.get('perPage')*1;
+        const page = req.query.page * 1 || 0 ;
+        let announcements = await Announcement.find().limit(perPage).skip(perPage * page);
+        return res.json(announcements);
     });
 
 
