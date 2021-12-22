@@ -8,7 +8,6 @@ const announcementScheme = new Schema(
         },
         target_audience : {
             type : String ,
-            required:true,
             enum: ['Manager', 'Hr','Receptionist', 'Barista'],
             default: 'All',
         },
