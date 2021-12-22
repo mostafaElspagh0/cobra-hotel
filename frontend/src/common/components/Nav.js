@@ -16,15 +16,15 @@ import avatar from '../resoursces/avat.png';
 import {useContext, useState} from "react";
 import PropTypes from 'prop-types';
 import {ButtonGroup} from "@material-ui/core";
-import {Link, useNavigate} from "react-router-dom";
-import {AuthContext} from "../../features/auth/AuthContext";
-import {ColorModeContext} from "../../features/theme/ToggleColorMode";
+import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../features/auth/context/AuthContext";
+import {DarkModeContext} from "../../features/darkMode/DarkModeProvider";
 import Switch from "@material-ui/core/Switch";
 
 const Nav = ({pages, currentPage}) => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const {toggleColorMode,isDark} = useContext(ColorModeContext);
+    const {toggleColorMode,isDark} = useContext(DarkModeContext);
     const navigate = useNavigate();
     const {signOut} = useContext(AuthContext);
     const handleOpenNavMenu = (event) => {
@@ -152,7 +152,7 @@ const Nav = ({pages, currentPage}) => {
                             <MenuItem>
                                 <Switch
                                     checked={isDark()}
-                                    onChange={(e) => toggleColorMode()}/>
+                                    onChange={() => toggleColorMode()}/>
                             </MenuItem>
                             <MenuItem>
                                 <Button onClick={() => {

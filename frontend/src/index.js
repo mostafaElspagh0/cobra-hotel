@@ -3,20 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import ToggleColorMode from "./features/theme/ToggleColorMode";
+import DarkModeProvider from "./features/darkMode/DarkModeProvider";
 import {CssBaseline} from "@mui/material";
-import {AuthProvider} from "./features/auth/AuthContext";
+import {AuthProvider} from "./features/auth/context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
     <React.StrictMode>
         <AuthProvider>
-            <ToggleColorMode>
+            <DarkModeProvider>
                 <CssBaseline/>
                 <BrowserRouter>
                     <App/>
                 </BrowserRouter>
-            </ToggleColorMode>
+            </DarkModeProvider>
         </AuthProvider>
     </React.StrictMode>,
     document.getElementById('root')

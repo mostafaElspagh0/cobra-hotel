@@ -3,7 +3,7 @@ import SignInPage from "./features/auth/components/SignInPage";
 import {Navigate, Route, Routes, useParams} from "react-router-dom";
 import RequireRole from "./features/auth/components/RequireRole";
 import DashBoardPage from "./features/dashBoard/components/DashBoardPage";
-import Hr from "./features/Hr/Hr";
+import Hr from "./features/hr/components/Hr";
 const Com = () => {
         let c = useParams();
         return <div>{c.id}</div>
