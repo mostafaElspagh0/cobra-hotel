@@ -4,9 +4,9 @@ import {createTheme, CssBaseline} from "@material-ui/core";
 import {deepOrange} from "@material-ui/core/colors";
 
 
-const ColorModeContext = createContext();
+const DarkModeContext = createContext();
 
-const ToggleColorMode = props => {
+const DarkModeProvider = props => {
     const [mode, setMode] = useState(() => {
         return localStorage.getItem('ColorMode') || 'light';
     });
@@ -42,7 +42,7 @@ const ToggleColorMode = props => {
         localStorage.setItem('ColorMode', newMode);
     };
     return (
-        <ColorModeContext.Provider value={{
+        <DarkModeContext.Provider value={{
             toggleColorMode,
             isDark,
         }}>
@@ -50,8 +50,8 @@ const ToggleColorMode = props => {
                 <CssBaseline/>
                 {props.children}
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </DarkModeContext.Provider>
     );
 }
-export default ToggleColorMode;
-export {ColorModeContext}                         ;
+export default DarkModeProvider;
+export {DarkModeContext}                         ;

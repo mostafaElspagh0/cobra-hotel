@@ -1,5 +1,5 @@
 import {Fragment, useContext} from 'react';
-import {AuthContext} from '../AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import {Navigate} from "react-router-dom";
 
 const RequireRole = ({roles, children}) => {

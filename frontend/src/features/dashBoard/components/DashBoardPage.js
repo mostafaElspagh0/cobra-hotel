@@ -1,4 +1,4 @@
-import {AuthContext} from "../../auth/AuthContext";
+import {AuthContext} from "../../auth/context/AuthContext";
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
 import Box from "@mui/material/Box";
