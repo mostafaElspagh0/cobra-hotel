@@ -79,6 +79,46 @@ router.delete('/:id',
         }
     });
 
+//-------put
+router.put('/:id',
+    [
+        check('_id', 'ID is required') .notEmpty().optional(),
+        check('target_audience', 'Target Audience is required').isIn(['Manager', 'Hr','Receptionist', 'Barista']).optional(),
+
+    ],
+    async (req , res ) => {
+        try{
+            const errors = validationResult(req);
+            if(!errors.isEmpty()){
+                return res.status(400).json({errors:errors.array()});
+            }
+            let{ issued_by,target_audience, title, body }=req.body;
+            const announcement = await Announcement.findById(req.params.id);
+            if(!announcement){
+                return res.status(404).json({msg:'announcement Not Found'});
+            }
+            if(issued_by){
+                announcement.issued_by=issued_by;
+            }
+            if(target_audience){
+                announcement.target_audience=target_audience
+            }
+            if(title){
+                announcement.title=title
+            }
+            if(body){
+                announcement.body=body
+            }
+
+            await announcement.save();
+            const userObj = announcement.toObject() ;
+            delete userObj.password;
+            res.json({msg:'announcement is updated',announcement:userObj});
+        }catch (err){
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    });
 
 
 module.exports= router;
