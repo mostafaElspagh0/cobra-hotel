@@ -42,6 +42,26 @@ router.post('/',
         }
     }
 );
+
+
+//-------getById
+router.get('/:id' ,
+    async (req , res ) => {
+        try {
+            const  id = req.params.id;
+            const announcement =await Announcement.findById(id)
+            if(!announcement){
+                return res.status(404).json({msg:'announcement not found'})
+            }
+            const announcementObj = announcement.toObject();
+            delete announcementObj.password;
+            res.json({announcement:announcementObj});
+        }catch (err){
+            console.log(err.message);
+            res.status(500).send('Server Error')
+        }
+    });
+
 module.exports= router;
 
 
