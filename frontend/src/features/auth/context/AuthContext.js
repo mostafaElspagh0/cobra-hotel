@@ -1,10 +1,21 @@
 import {createContext, useEffect, useState} from "react";
-import axios from "axios";
-import config from "../../../config/config";
+import decodeToken from "../utils/decodeToken";
+import * as Api from "../api/AuthApi"
 
-const AuthContext = createContext();
+const AuthContext = createContext({
+    isAuthenticated : false,
+    user : {},
+    signIn : ()=>{},
+    signOut: ()=>{},
+    status: null,
+    error: null,
+    dismissError: ()=>{},
+    getRole: ()=>{},
+});
 
 const AuthProvider = (props) => {
+
+
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -23,6 +34,8 @@ const AuthProvider = (props) => {
     });
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
+
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -38,59 +51,44 @@ const AuthProvider = (props) => {
             }
         }
     }, [isAuthenticated]);
+
+
     const getRole = () => {
         if (user) {
             return user.user.job_type;
         }
         return null;
     };
-    function jwt_decode(token) {
-        try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        } catch (e) {
-            return null;
-        }
-    }
     const dismissError = () => {
         setStatus(null);
     };
     const signIn = (email, password) => {
         setStatus('loading');
-        const data = {
-            email,
-            password
-        };
-        axios.post(`${config.api_url}/auth/login`, data)
-            .then(res => {
-                if (res.status === 200 && res.data.token) {
-                    const decoded = jwt_decode(res.data.token);
-                    setIsAuthenticated(true);
-                    localStorage.setItem("token", res.data.token);
-                    setUser(decoded);
-                    setStatus('success');
-                } else if (res.status === 200 && !res.data.token && res.data.errors) {
-                    setStatus('error');
-                    setError(res.data.errors[0].msg);
-                } else {
-                    setStatus('error');
-                    setError("Something went wrong");
-                }
-            })
-            .catch(err => {
-                setStatus('error');
-                setError(err.message);
-            });
+        try {
+            const token = Api.signIn(email, password);
+            const decoded = decodeToken(token);
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp < currentTime) {
+                localStorage.removeItem("token");
+                setIsAuthenticated(false);
+                setUser(null);
+            } else {
+                localStorage.setItem("token", decoded);
+                setIsAuthenticated(true);
+                setUser(decoded);
+                setStatus('success');
+            }
+        } catch (e) {
+            setStatus('error');
+            setError("Something went wrong")
+        }
     };
     const signOut = () => {
         localStorage.removeItem("token");
         setIsAuthenticated(false);
         setUser(null);
     };
+
     return (
         <AuthContext.Provider value={
             {
