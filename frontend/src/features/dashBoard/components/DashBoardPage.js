@@ -1,7 +1,7 @@
 import {AuthContext} from "../../auth/AuthContext";
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
-import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 const {useContext} = require("react");
 
 const DashBoardPage = () => {
@@ -11,7 +11,7 @@ const DashBoardPage = () => {
     if (!isAuthenticated) {
         return <Navigate to="/login"/>
     }
-    const getPages = (role, activePage) => {
+    const getPages = (role) => {
         // TODO: refactor this can done in a better way
         const pages = {
             // path should be same as the path in the url
@@ -116,11 +116,17 @@ const DashBoardPage = () => {
 
     }
     return (
-        <div>
-            <Grid minHeight="100vh">
-                <Nav pages={getPages(getRole())} currentPage={activePagePath}/>
-                <Outlet/>
-            </Grid>
+        <div style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexFlow: "column",
+            }}>
+            <Nav pages={getPages(getRole())} activePage={activePagePath}/>
+            <Box style={{
+                flex: 1,
+            }}>
+              <Outlet/>
+            </Box>
         </div>
     )
 }
