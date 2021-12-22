@@ -19,7 +19,7 @@ const AuthProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decoded = jwt_decode(token);
+            const decoded = decodeToken(token);
             const currentTime = Date.now() / 1000;
             return decoded.exp >= currentTime;
         }
@@ -28,7 +28,7 @@ const AuthProvider = (props) => {
     const [user, setUser] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            return jwt_decode(token);
+            return decodeToken(token);
         }
         return null;
     });
@@ -39,7 +39,7 @@ const AuthProvider = (props) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decoded = jwt_decode(token);
+            const decoded = decodeToken(token);
             const currentTime = Date.now() / 1000;
             if (decoded.exp < currentTime) {
                 localStorage.removeItem("token");
@@ -62,10 +62,10 @@ const AuthProvider = (props) => {
     const dismissError = () => {
         setStatus(null);
     };
-    const signIn = (email, password) => {
+    const signIn = async (email, password) => {
         setStatus('loading');
         try {
-            const token = Api.signIn(email, password);
+            const token = await Api.signIn(email, password);
             const decoded = decodeToken(token);
             const currentTime = Date.now() / 1000;
             if (decoded.exp < currentTime) {
@@ -73,7 +73,7 @@ const AuthProvider = (props) => {
                 setIsAuthenticated(false);
                 setUser(null);
             } else {
-                localStorage.setItem("token", decoded);
+                localStorage.setItem("token",token);
                 setIsAuthenticated(true);
                 setUser(decoded);
                 setStatus('success');
