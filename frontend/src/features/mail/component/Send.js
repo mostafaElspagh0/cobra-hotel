@@ -10,17 +10,19 @@ const Send =()=>{
     return(
             <Fragment>
                 <Container>
-                    <Grid container  sm={12} spacing={5}>
-                        <Grid container item sm={12}>
-                            <Grid item sm={6}>
-                                <TextField id="outlined-search" label="Subject" type="search"
+                    <Grid container  sm={12} direction="column" spacing={5}>
+                                    <Grid item></Grid>
+                                    <Grid item></Grid>
+                        <Grid container item sm={12} >
+                            <Grid item sm={6} display="flex" justifyContent="flex-end">
+                                <TextField id="outlined-search" label="Title" type="search"
                                            style={{
                                                width:'30vw'
                                            }}
                                 />
                             </Grid>
-                            <Grid item sm={6}>
-                                <TextField id="outlined-search" label="Subject" type="search"
+                            <Grid item sm={4} display="flex" justifyContent="space-evenly">
+                                <TextField id="outlined-search" label="To" type="search"
                                            style={{
                                                width:'30vw'
                                            }}
@@ -28,7 +30,7 @@ const Send =()=>{
                             </Grid>
                         </Grid>
 
-                        <Grid item >
+                        <Grid item  display="flex" justifyContent="center">
                             <TextField id="outlined-search" label="Subject" type="search"
                                        style={{
                                            width:'30vw'
@@ -36,11 +38,11 @@ const Send =()=>{
                             />
                         </Grid>
 
-                        <Grid item >
+                        <Grid item display="flex" justifyContent="center">
                             <TextareaAutosize
                                 aria-label="minimum height"
                                 minRows={13}
-                                placeholder="Your Announcement"
+                                placeholder="Your E-mail"
                                 style={{ width:"40vw",
                                     backgroundColor :"inherit",
                                     borderColor:"#adadad",
@@ -49,14 +51,14 @@ const Send =()=>{
                                 }}
                             />
                         </Grid>
-                        <Grid item >
+                        <Grid item  display="flex" justifyContent="center">
                             <Grid item></Grid>
                             <Button variant="contained" sx={{
                                 color:"white",
                                 width:'15vw'
                             }}
                             >
-                                Push Announcement
+                                Send E-mail
 
                             </Button>
                         </Grid>
