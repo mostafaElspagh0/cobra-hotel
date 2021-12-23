@@ -8,7 +8,7 @@ const isA = (job_types) => {
         try {
             const decoded = await validateToken(token);
             if (!decoded) {
-                return res.status(401).json({errors: [{msg: 'Token is not '}]})
+                return res.status(401).json({errors: [{msg: 'Invalid Token ,authorization denied '}]});
             }
             if (!job_types.includes(decoded.user.job_type)) {
                 return res.status(401).json({errors: [{msg: 'you ara not authorization'}]})
