@@ -1,8 +1,18 @@
 import axios from "axios";
 import config from "../../../config/config";
 
-const getEmployees = async (token, page , perPage) => {
-    const res = await axios.get(`${config.api_url}/employee`, {
+export async function updateEmployeeById(token, id, data) {
+    const url = `${config.api_url}/employee/${id}`;
+    return await axios.put(url, data, {
+        headers: {
+            "x-auth-token" : token
+        }
+    });
+}
+
+
+const getEmployees = async (token,page , perPage) => {
+    return await axios.get(`${config.api_url}/employee`, {
         headers: {
             "x-auth-token": token
         },
@@ -11,7 +21,6 @@ const getEmployees = async (token, page , perPage) => {
             limit: perPage || 10,
         }
     });
-    return res;
 }
 
 const getEmployeeId = async (token, id) => {
@@ -23,8 +32,18 @@ const getEmployeeId = async (token, id) => {
     return res.data.user;
 }
 
+const deleteEmployeeById = async (token, id) => {
+    const res = await axios.delete(`${config.api_url}/employee/${id}`, {
+        headers: {
+            "x-auth-token": token
+        }
+    });
+    return res;
+}
+
 
 export  {
     getEmployees
-    , getEmployeeId
+    , getEmployeeId,
+    deleteEmployeeById
 }

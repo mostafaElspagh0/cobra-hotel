@@ -1,120 +1,30 @@
-import * as React from 'react';
 import {Container} from "@mui/material";
-import {Fragment, useContext, useEffect, useState} from "react";
+import {Fragment, useContext} from "react";
 import {DataGrid} from '@mui/x-data-grid';
 import Grid from "@mui/material/Grid";
 import {
     FormControl,
     InputAdornment,
-    OutlinedInput, Paper,
+    OutlinedInput,
+    Paper,
 } from "@material-ui/core";
 import SearchIcon from '@mui/icons-material/Search';
-import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
-import * as Api from "../api/employeeApi"
-import {AuthContext} from "../../auth/context/AuthContext";
-import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {Outlet, useLocation} from "react-router-dom";
+import {HrContext} from "../context/hrContext";
 
 
 const Hr = () => {
-    const {getToken} = useContext(AuthContext);
-    const [rows, setRows] = useState({users: [], count: 0});
-    const [isLoading, setIsLoading] = useState(true);
-    const [page, setPage] = useState(0);
-    const Location = useLocation();
-    const Navigate = useNavigate();
-    const columns = [
-        {
-            field: '_id',
-            headerName: 'Edit',
-            renderCell: ({id}) => {
-                return (
-                    <IconButton onClick={
-                        (e) => Navigate(`edit/${id}`)
-                    }>
-                        <EditIcon/>
-                    </IconButton>
-                )
-            },
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: 'name',
-            headerName: 'Name',
-            sortable: false,
-            filterable: false
-        },
-        {
-            field: 'job_type',
-            headerName: 'job',
-            sortable: false,
-            filterable: false
-        },
-        {
-            field: 'email', headerName: 'email',
-            width: 250,
-            sortable: false,
-            filterable: false
-        },
-        {
-            field: 'password',
-            headerName: 'password',
-            hide: true,
-        },
-        {
-            field: 'created_at',
-            headerName: 'Year',
-            type: 'dateTime',
-            hide: true,
-            valueGetter: ({value}) => value && new Date(value),
-        },
-        {
-            field: 'updated_at',
-            headerName: 'updated_at',
-            type: 'dateTime',
-            hide: true,
-            valueGetter: ({value}) => value && new Date(value),
-        },
-        {
-            field: '__v',
-            headerName: 'Name',
-            hide: true
-        }
-    ]
-    const a = 1;
-    useEffect(() => {
-            setIsLoading(true);
-            const fetchData = async () => {
-                Api.getEmployees(getToken()).then(
-                    (res) => {
-                        setRows(res.data)
-                        setIsLoading(false);
-                    }
-                )
-            }
-            fetchData();
-        }, [a]
-    )
-
+    const {getPage, popup, isLoading, rows, columns, page, closeEdit} = useContext(HrContext);
+    const location = useLocation();
+    if(location.pathname.includes('edit')  == false&& popup){
+        closeEdit();
+    }
     const handlePageChange = (page) => {
-        setIsLoading(true);
-        Api.getEmployees(getToken(), page).then(
-            (res) => {
-                setRows(res.data)
-                setPage(page);
-                setIsLoading(false);
-            }
-        )
-    }
-
-    const isPopup = () => {
-        return Location.pathname.includes('/edit')
-    }
+        getPage(page);
+    };
     return (
         <Fragment>
-            {isPopup() &&
-
+            {popup &&
                 <Paper
                     style={{
                         position: 'absolute',
@@ -130,7 +40,7 @@ const Hr = () => {
                 </Paper>
             }
             <Container style={
-                (isPopup()) ? {
+                (popup) ? {
                     WebkitFilter: 'blur(5px)',
                     MozFilter: 'blur(5px)',
                     MsFilter: 'blur(5px)',
@@ -160,10 +70,10 @@ const Hr = () => {
                             disableSelectionOnClick
                             pageSize={10}
                             page={page}
-                            onPageChange={(e, g,) => {
-                                handlePageChange(e)
+                            onPageChange={(p, g,) => {
+                                handlePageChange(p)
                             }}
-                            rowsPerPageOptions={[]}
+                            rowsPerPageOptions={[10]}
                             rowCount={rows.count}
                             paginationMode={"server"}
                             columns={columns}

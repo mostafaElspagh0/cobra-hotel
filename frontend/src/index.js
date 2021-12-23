@@ -7,6 +7,7 @@ import DarkModeProvider from "./features/darkMode/DarkModeProvider";
 import {CssBaseline} from "@mui/material";
 import {AuthProvider} from "./features/auth/context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
+import {HrContextProvider} from "./features/hr/context/hrContext";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.render(
             <DarkModeProvider>
                 <CssBaseline/>
                 <BrowserRouter>
+                    <HrContextProvider>
                     <App/>
+                    </HrContextProvider>
                 </BrowserRouter>
             </DarkModeProvider>
         </AuthProvider>
