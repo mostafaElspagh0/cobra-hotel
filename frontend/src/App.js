@@ -20,6 +20,7 @@ function App() {
                         <Route path="edit/:id" element={<EditEmployee/>} />
                     </Route>
                     <Route path="Orders" element={<RequireRole roles={['Manager']}><Com/>sadfasflkj</RequireRole>} />
+                    <Route path="Announcement" element={<RequireRole roles={['Manager',"Hr"]}><Com/>sadfasflkj</RequireRole>} />
                     <Route path=":id" element={<Com/>} />
                 </Route>
                 <Route path="/" element={<Navigate path='/' to='dashboard'/>} />
