@@ -11,11 +11,10 @@ const AuthContext = createContext({
     error: null,
     dismissError: ()=>{},
     getRole: ()=>{},
+    getToken: ()=>{},
 });
 
 const AuthProvider = (props) => {
-
-
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -52,6 +51,12 @@ const AuthProvider = (props) => {
         }
     }, [isAuthenticated]);
 
+    const getToken = () => {
+        if (isAuthenticated) {
+            return localStorage.getItem("token");
+        }
+        return null;
+    };
 
     const getRole = () => {
         if (user) {
@@ -99,7 +104,8 @@ const AuthProvider = (props) => {
                 status,
                 error,
                 dismissError,
-                getRole
+                getRole,
+                getToken
             }
         }>
             {props.children}
