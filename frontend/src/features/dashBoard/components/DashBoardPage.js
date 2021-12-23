@@ -32,7 +32,7 @@ const DashBoardPage = () => {
             },
             'Send E-mail': {
                 name: "Send E-mail",
-                path: "Send E-mail",
+                path: "email",
                 component: () => {
                     return <div>Dashboard</div>
                 }
