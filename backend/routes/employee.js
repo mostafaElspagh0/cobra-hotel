@@ -4,7 +4,7 @@ const config = require('config');
 const User = require("../services/database/models/user");
 const {check, validationResult} = require("express-validator");
 const {isA} = require("../services/auth/middlelayers/rolesMiddleLayer");
-router.use(isA(["Hr","Manger"]));
+router.use(isA(["Hr","Manager"]));
 
 //-------post
 router.post('/',
@@ -139,7 +139,8 @@ router.get("/",
     const perPage = req.query.perPage * 1 || config.get('perPage')*1;
     const page = req.query.page * 1 || 0 ;
     let users = await User.find().limit(perPage).skip(perPage * page);
-    return res.json(users);
+    let count = await User.countDocuments();
+    return res.json({users,count});
     });
 
 

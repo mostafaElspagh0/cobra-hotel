@@ -7,14 +7,14 @@ import Container from '@mui/material/Container';
 import {CircularProgress, IconButton, Switch} from "@material-ui/core";
 import {Alert, AppBar} from "@mui/material";
 import {useContext} from "react";
-import {ColorModeContext} from "../../theme/ToggleColorMode";
+import {DarkModeContext} from "../../darkMode/DarkModeProvider";
 import {useForm, Controller} from "react-hook-form";
 import CloseIcon from '@mui/icons-material/Close';
 import { Navigate } from 'react-router-dom';
-import {AuthContext} from "../AuthContext";
+import {AuthContext} from "../context/AuthContext";
 
 const SignInPage = () => {
-    const {toggleColorMode} = useContext(ColorModeContext);
+    const {toggleColorMode,isDark} = useContext(DarkModeContext);
     const {handleSubmit, control} = useForm();
     const {status, error, dismissError} = useContext(AuthContext);
     const {
@@ -35,7 +35,9 @@ const SignInPage = () => {
                         alignSelf: 'flex-end',
                     }
                 }>
-                    <Switch onChange={(e) => toggleColorMode()}/>
+                    <Switch
+                        checked={isDark()}
+                        onChange={() => toggleColorMode()}/>
                 </Box>
             </AppBar>
             <Box

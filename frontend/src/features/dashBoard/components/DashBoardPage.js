@@ -1,66 +1,66 @@
-import {AuthContext} from "../../auth/AuthContext";
-import {Navigate} from "react-router-dom";
+import {AuthContext} from "../../auth/context/AuthContext";
+import {Navigate, Outlet, useLocation} from "react-router-dom";
 import Nav from "../../../common/components/Nav";
-import {useState} from "react";
-
+import Box from "@mui/material/Box";
 const {useContext} = require("react");
 
 const DashBoardPage = () => {
     const {isAuthenticated, getRole} = useContext(AuthContext);
-    const [activePage, setActivePage] = useState("/Announcement");
-    console.log(activePage);
+    const location = useLocation();
+    const activePagePath = decodeURI(location.pathname).split('/')[2];
     if (!isAuthenticated) {
         return <Navigate to="/login"/>
     }
-    const getPages = (role, activePage) => {
+    const getPages = (role) => {
+        // TODO: refactor this can done in a better way
         const pages = {
             // path should be same as the path in the url
             // path should be unique
             'Employee': {
                 name: "Employee",
-                path: "/Employee",
+                path: "Employee",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Announcement': {
                 name: "Announcement",
-                path: "/Announcement",
+                path: "Announcement",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Send E-mail': {
                 name: "Send E-mail",
-                path: "/Send E-mail",
+                path: "Send E-mail",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Orders': {
                 name: "Orders",
-                path: "/Orders",
+                path: "Orders",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Storage': {
                 name: "Storage",
-                path: "/Storage",
+                path: "Storage",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Arrival': {
                 name: "Arrival",
-                path: "/Arrival",
+                path: "Arrival",
                 component: () => {
                     return <div>Dashboard</div>
                 }
             },
             'Cleaning': {
                 name: "Cleaning",
-                path: "/Cleaning",
+                path: "Cleaning",
                 component: () => {
                     return <div>Dashboard</div>
                 }
@@ -103,19 +103,30 @@ const DashBoardPage = () => {
             default:
                 return [];
         }
+        // decode the url
+
         return ret.map(page => {
-            console.log(page.path , activePage);
             return {
                 name: page.name,
                 path: page.path,
                 component: page.component,
+                isActive: page.path === activePagePath
             }
         });
 
     }
     return (
-        <div>
-            <Nav pages={getPages(getRole())} activePage={activePage}/>
+        <div style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexFlow: "column",
+            }}>
+            <Nav pages={getPages(getRole())} activePage={activePagePath}/>
+            <Box style={{
+                flex: 1,
+            }}>
+              <Outlet/>
+            </Box>
         </div>
     )
 }
