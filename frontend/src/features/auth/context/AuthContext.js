@@ -10,7 +10,6 @@ const AuthContext = createContext({
     status: null,
     error: null,
     dismissError: ()=>{},
-    getRole: ()=>{},
     getToken: ()=>{},
 });
 
@@ -34,7 +33,9 @@ const AuthProvider = (props) => {
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
 
-
+    const getToken = () => {
+        return localStorage.getItem("token");
+    };
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -51,12 +52,6 @@ const AuthProvider = (props) => {
         }
     }, [isAuthenticated]);
 
-    const getToken = () => {
-        if (isAuthenticated) {
-            return localStorage.getItem("token");
-        }
-        return null;
-    };
 
     const getRole = () => {
         if (user) {
@@ -72,17 +67,10 @@ const AuthProvider = (props) => {
         try {
             const token = await Api.signIn(email, password);
             const decoded = decodeToken(token);
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                localStorage.removeItem("token");
-                setIsAuthenticated(false);
-                setUser(null);
-            } else {
-                localStorage.setItem("token",token);
-                setIsAuthenticated(true);
-                setUser(decoded);
-                setStatus('success');
-            }
+            localStorage.setItem("token", token);
+            setUser(decoded);
+            setIsAuthenticated(true);
+            setStatus('success');
         } catch (e) {
             setStatus('error');
             setError("Something went wrong")
