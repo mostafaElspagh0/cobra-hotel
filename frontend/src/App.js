@@ -21,6 +21,7 @@ function App() {
                     </Route>
                     <Route path="Orders" element={<RequireRole roles={['Manager']}><Com/>sadfasflkj</RequireRole>} />
                     <Route path="Announcement" element={<RequireRole roles={['Manager',"Hr"]}><Com/>sadfasflkj</RequireRole>} />
+                    <Route path={"email"} element={<RequireRole roles={['Manager',"Hr"]}><Com/>sadfasflkj</RequireRole>}/>
                     <Route path=":id" element={<Com/>} />
                 </Route>
                 <Route path="/" element={<Navigate path='/' to='dashboard'/>} />
