@@ -1,26 +1,32 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import logo from '../../../common/logo.svg';
+import logo from '../../../common/resoursces/logo.svg';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {CircularProgress, IconButton, Switch} from "@material-ui/core";
 import {Alert, AppBar} from "@mui/material";
 import {useContext} from "react";
-import {ColorModeContext} from "../../theme/ToggleColorMode";
+import {DarkModeContext} from "../../darkMode/DarkModeProvider";
 import {useForm, Controller} from "react-hook-form";
-import {AuthContext} from "../AuthContext";
 import CloseIcon from '@mui/icons-material/Close';
-const SignInPage = (props) => {
-    const {toggleColorMode} = useContext(ColorModeContext);
+import { Navigate } from 'react-router-dom';
+import {AuthContext} from "../context/AuthContext";
+
+const SignInPage = () => {
+    const {toggleColorMode,isDark} = useContext(DarkModeContext);
     const {handleSubmit, control} = useForm();
-    const {status , error, dismissError} = useContext(AuthContext);
+    const {status, error, dismissError} = useContext(AuthContext);
     const {
-        signIn
+        signIn,
+        isAuthenticated
     } = useContext(AuthContext);
     const onSubmit = (data) => {
         signIn(data.email, data.password);
     };
+    if(isAuthenticated){
+        return <Navigate to="/"/>
+    }
     return (
         <Container component="main" maxWidth="xs">
             <AppBar>
@@ -29,7 +35,9 @@ const SignInPage = (props) => {
                         alignSelf: 'flex-end',
                     }
                 }>
-                    <Switch onChange={(e) => toggleColorMode()}/>
+                    <Switch
+                        checked={isDark()}
+                        onChange={() => toggleColorMode()}/>
                 </Box>
             </AppBar>
             <Box
@@ -107,7 +115,7 @@ const SignInPage = (props) => {
                                     size="small"
                                     onClick={() => dismissError()}
                                 >
-                                    <CloseIcon />
+                                    <CloseIcon/>
                                 </IconButton>
                             }
                         >

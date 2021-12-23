@@ -1,13 +1,16 @@
 import React, {createContext, useMemo, useState} from 'react';
 import {ThemeProvider} from "@emotion/react";
 import {createTheme, CssBaseline} from "@material-ui/core";
-import { deepOrange} from "@material-ui/core/colors";
+import {deepOrange} from "@material-ui/core/colors";
 
 
-const ColorModeContext = createContext();
+const DarkModeContext = createContext();
 
-const ToggleColorMode = props => {
-    const [mode, setMode] = useState('light');
+const DarkModeProvider = props => {
+    const [mode, setMode] = useState(() => {
+        return localStorage.getItem('ColorMode') || 'light';
+    });
+    const isDark = () => mode === 'dark';
     const getDesignTokens = (mode) => ({
         palette: {
             type: mode,
@@ -34,18 +37,21 @@ const ToggleColorMode = props => {
         () => createTheme(getDesignTokens(mode)), [mode],
     );
     const toggleColorMode = () => {
-        setMode(mode === "light" ? "dark" : "light");
+        const newMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newMode);
+        localStorage.setItem('ColorMode', newMode);
     };
     return (
-        <ColorModeContext.Provider value={{
-            toggleColorMode, colorMode: mode
+        <DarkModeContext.Provider value={{
+            toggleColorMode,
+            isDark,
         }}>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 {props.children}
             </ThemeProvider>
-        </ColorModeContext.Provider>
+        </DarkModeContext.Provider>
     );
 }
-export default ToggleColorMode;
-export {ColorModeContext}                         ;
+export default DarkModeProvider;
+export {DarkModeContext}                         ;

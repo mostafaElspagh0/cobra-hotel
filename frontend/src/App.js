@@ -1,24 +1,29 @@
-import React, {Fragment, useContext, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import SignInPage from "./features/auth/components/SignInPage";
-import {Route, Routes,useNavigate,useLocation} from "react-router-dom";
-import {AuthContext} from "./features/auth/AuthContext";
+import {Navigate, Route, Routes, useParams} from "react-router-dom";
+import RequireRole from "./features/auth/components/RequireRole";
+import DashBoardPage from "./features/dashBoard/components/DashBoardPage";
+import Hr from "./features/hr/components/Hr";
+import EditEmployee from "./features/hr/components/EditEmployee";
+const Com = () => {
+        let c = useParams();
+        return <div>{c.id}</div>
+
+};
 function App() {
-    const {isAuthenticated } = useContext(AuthContext);
-    const navigate = useNavigate();
-    const location = useLocation();
-    useEffect(() => {
-        if(!isAuthenticated && location.pathname !== '/login'){
-            navigate('/login');
-        }
-        if(isAuthenticated && location.pathname === '/login'){
-            navigate('/');
-        }
-    }, [isAuthenticated,location.pathname,navigate]);
     return (
         <Fragment>
             <Routes>
                 <Route path="/login" element={<SignInPage />} />
-                <Route path="/" element={<div>{"fdfsf"}</div>} />
+                <Route path="/dashboard" element={<DashBoardPage/>} >
+                    <Route path="employee" element={<RequireRole roles={['Manager','Hr']}><Hr/></RequireRole>} >
+                        <Route path="edit/:id" element={<EditEmployee/>} />
+                    </Route>
+                    <Route path="Orders" element={<RequireRole roles={['Manager']}><Com/>sadfasflkj</RequireRole>} />
+                    <Route path=":id" element={<Com/>} />
+                </Route>
+                <Route path="/" element={<Navigate path='/' to='dashboard'/>} />
+
             </Routes>
         </Fragment>
     );
