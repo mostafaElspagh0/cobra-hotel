@@ -19,6 +19,10 @@ const roomScheme = new Schema(
         who_in_room :{
             type : String,
             require : false
+        },
+        price :{
+            type : Number,
+            require: true
         }
 
     });
