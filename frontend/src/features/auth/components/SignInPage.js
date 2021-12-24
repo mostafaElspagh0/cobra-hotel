@@ -10,13 +10,14 @@ import {useContext} from "react";
 import {DarkModeContext} from "../../darkMode/DarkModeProvider";
 import {useForm, Controller} from "react-hook-form";
 import CloseIcon from '@mui/icons-material/Close';
-import { Navigate } from 'react-router-dom';
+import { Navigate , useNavigate } from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext";
 
 const SignInPage = () => {
     const {toggleColorMode,isDark} = useContext(DarkModeContext);
     const {handleSubmit, control} = useForm();
     const {status, error, dismissError} = useContext(AuthContext);
+    const navigate = useNavigate();
     const {
         signIn,
         isAuthenticated
@@ -140,8 +141,7 @@ const SignInPage = () => {
                     <Typography variant="body2" color="textSecondary" align="left">
                         {'lost your password'}
                         <Button
-                            component="a"
-                            href="/signup"
+                            onClick={() => {navigate('/forgot-password');dismissError()}}
                             variant="text"
                             color="primary"
                             disabled={status === 'loading'}
