@@ -36,6 +36,25 @@ const AuthProvider = (props) => {
     const getToken = () => {
         return localStorage.getItem("token");
     };
+
+    const forgetPassword = async (email)=>{
+
+        try {
+            let res = await Api.forgetPassword(email);
+            if(res.status === 200){
+                setStatus("success");
+                setError(null);
+
+            }else{
+                setStatus("error");
+                setError("invalid email");
+            }
+        } catch (e) {
+
+            setStatus("error");
+            setError("invalid email");
+        }
+    };
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -93,7 +112,8 @@ const AuthProvider = (props) => {
                 error,
                 dismissError,
                 getRole,
-                getToken
+                getToken,
+                forgetPassword
             }
         }>
             {props.children}
