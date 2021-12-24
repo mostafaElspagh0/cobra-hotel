@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState} from "react";
+import {createContext, useState} from "react";
 import decodeToken from "../utils/decodeToken";
 import * as Api from "../api/AuthApi"
 
@@ -17,7 +17,10 @@ const AuthProvider = (props) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decoded = decodeToken(token);
+            const decoded = decodeToken(token)
+            if (!decoded) {
+                return false;
+            }
             const currentTime = Date.now() / 1000;
             return decoded.exp >= currentTime;
         }
@@ -55,21 +58,7 @@ const AuthProvider = (props) => {
             setError("invalid email");
         }
     };
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            const decoded = decodeToken(token);
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                localStorage.removeItem("token");
-                setIsAuthenticated(false);
-                setUser(null);
-            } else {
-                setIsAuthenticated(true);
-                setUser(decoded);
-            }
-        }
-    }, [isAuthenticated]);
+
 
 
     const getRole = () => {
@@ -86,10 +75,15 @@ const AuthProvider = (props) => {
         try {
             const token = await Api.signIn(email, password);
             const decoded = decodeToken(token);
-            localStorage.setItem("token", token);
-            setUser(decoded);
-            setIsAuthenticated(true);
-            setStatus('success');
+            if (decoded) {
+                localStorage.setItem("token", token);
+                setIsAuthenticated(true);
+                setUser(decoded);
+                setStatus('success');
+            } else {
+                setStatus('error');
+                setError("Invalid email or password");
+            }
         } catch (e) {
             setStatus('error');
             setError("Something went wrong")
