@@ -1,5 +1,5 @@
 import {Container} from "@mui/material";
-import {Fragment, useContext} from "react";
+import {Fragment, useContext, useEffect} from "react";
 import {DataGrid} from '@mui/x-data-grid';
 import Grid from "@mui/material/Grid";
 import {
@@ -14,14 +14,17 @@ import {HrContext} from "../context/hrContext";
 
 
 const Hr = () => {
-    const {getPage, popup, isLoading, rows, columns, page, closeEdit} = useContext(HrContext);
+    const {getPage, popup, isLoading, rows, columns, page, closeEdit,init} = useContext(HrContext);
     const location = useLocation();
-    if(location.pathname.includes('edit')  == false&& popup){
+    if(location.pathname.includes('edit')  === false&& popup){
         closeEdit();
     }
     const handlePageChange = (page) => {
         getPage(page);
     };
+    useEffect(() => {
+        init();
+    }, []);
     return (
         <Fragment>
             {popup &&
@@ -70,7 +73,7 @@ const Hr = () => {
                             disableSelectionOnClick
                             pageSize={10}
                             page={page}
-                            onPageChange={(p, g,) => {
+                            onPageChange={(p,) => {
                                 handlePageChange(p)
                             }}
                             rowsPerPageOptions={[10]}
