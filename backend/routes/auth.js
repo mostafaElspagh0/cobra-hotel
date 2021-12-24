@@ -53,33 +53,27 @@ router.post('/login',
     }
 );
 
-router.post('/forgetPassword',[
+router.post('/forgetPassword', [
     check('email', 'Please include a valid email').isEmail()
-], (req,res)=>{
+], async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
-    let {email} = req.body;
-    User.findOne({email})
-        .then(user=>{
-            if(!user){
-                return res.status(200).json({errors: [{msg: 'Invalid credentials'}]});
-            }
-            sendResetPassword(user.email, user.password)
-                .then(()=>{
-                    res.status(200).json({msg: 'Email sent'});
-                })
-                .catch(err=>{
-                    console.error(err.message);
-                    res.status(500).send('Server Error');
-                })
-        })
-        .catch(err=>{
-            console.error(err.message);
-            res.status(500).send('Server Error');
-        })
+    try {
+        let {email} = req.body;
+        const user = await User.findOne({email})
+        if (!user) {
+            return res.status(404).json({errors: [{msg: 'Invalid credentials'}]});
+        }
+        await sendResetPassword(user.email)
+        res.status(200).json({msg: 'Email sent'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 })
+    
 router.post("/resetPassword",
     [
         check("token").notEmpty(),
@@ -90,12 +84,12 @@ router.post("/resetPassword",
         if (!errors.isEmpty()) {
             return res.status(400).json({errors: errors.array()});
         }
-        let {token,new_password} = req.body;
+        let {token, new_password} = req.body;
         let decoded = await validateToken(token);
         let user = await User.findOne({"email": decoded.email});
         if (!user) {
             return res
-                .status(200)
+                .status(401)
                 .json({errors: [{msg: 'Invalid credentials'}]});
         }
         user.password = new_password;
