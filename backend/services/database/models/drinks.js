@@ -9,7 +9,7 @@ const drinkScheme = new Schema(
             require:true
         },
         type:{
-            type:String
+            type:String,
             require:true
         },
         size:{
