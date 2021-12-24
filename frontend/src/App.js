@@ -6,6 +6,8 @@ import DashBoardPage from "./features/dashBoard/components/DashBoardPage";
 import Hr from "./features/hr/components/Hr";
 import EditEmployee from "./features/hr/components/EditEmployee";
 import ForgetPassword from "./features/auth/components/ForgetPassword";
+import Orders from "./features/Orders/Component/Orders";
+import SendEmailPage from "./features/mail/component/SendEmailPage";
 const Com = () => {
         let c = useParams();
         return <div>{c.id}</div>
@@ -21,7 +23,8 @@ function App() {
                     <Route path="employee" element={<RequireRole roles={['Manager','Hr']}><Hr/></RequireRole>} >
                         <Route path="edit/:id" element={<EditEmployee/>} />
                     </Route>
-                    <Route path="Orders" element={<RequireRole roles={['Manager']}><Com/>sadfasflkj</RequireRole>} />
+                    <Route path="email" element={<RequireRole roles={['Manager','Hr']}><SendEmailPage/></RequireRole>} />
+                    <Route path="Orders" element={<RequireRole roles={['Manager','Barista']}><Orders/></RequireRole>} />
                     <Route path="Announcement" element={<RequireRole roles={['Manager',"Hr"]}><Com/>sadfasflkj</RequireRole>} />
                     <Route path=":id" element={<Com/>} />
                 </Route>

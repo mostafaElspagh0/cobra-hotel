@@ -3,7 +3,6 @@ import {Fragment} from "react";
 import Container from "@mui/material/Container";
 import Button from '@mui/material/Button';
 import Grid from "@mui/material/Grid";
-import Nav from "../../../common/components/Nav";
 import Search from "../../../common/components/Search";
 import * as React from 'react';
 import Card from '@mui/material/Card';
@@ -12,22 +11,20 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import {Paper} from "@material-ui/core";
-import man from "../resource/pexels-photo-206359.jpeg";
-import man1 from "../resource/pexels-photo-346529.jpeg";
-import man2 from "../resource/pexels-photo-417074.jpeg";
-import man3 from "../resource/pexels-photo-443446.jpeg";
-import man4 from "../resource/pexels-photo-691668.jpeg";
-import man5 from "../resource/pexels-photo-1166209.jpeg";
-import man6 from "../resource/pexels-photo-1323550.jpeg";
-import man7 from "../resource/pexels-photo-2246476.jpeg";
-import man8 from "../resource/pexels-photo-210186.jpeg";
+import man from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man1 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man2 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man3 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man4 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man5 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man6 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man7 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
+import man8 from "../../../common/resoursces/pexels-photo-1166209.jpeg";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
-function DeleteForeverIcon() {
-    return null;
-}
+
 
 const Orders = () => {
     return (
@@ -35,7 +32,7 @@ const Orders = () => {
             <Container>
 
                 <Grid container direction="row" xl={12} lg={12} md={12} spacing={5}>
-                    <Grid item sm={12}></Grid>
+                    <Grid item sm={12}/>
 
 
                             <Grid container item  xl={4}  lg={3.5} md={12} display="flex" justifyContent="center">
@@ -57,7 +54,7 @@ const Orders = () => {
 
                 <Grid container direction="row"  spacing={5}>
 
-                    <Grid item  sm={12}></Grid>
+                    <Grid item  sm={12}/>
 
 
                     <Grid container item xl={12} lg={12} md={12} xs={12} direction="row">
