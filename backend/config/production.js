@@ -7,5 +7,9 @@ module.exports = {
     "SALT_WORK_FACTOR" : process.env.SALT_WORK_FACTOR,
     "corsOrigin": process.env.FRONTEND_ORIGIN,
     "perPage":10,
+    "gmail":{
+        "user": process.env.GMAIL_USER,
+        "pass": process.env.GMAIL_PASS
+    },
 
 };
