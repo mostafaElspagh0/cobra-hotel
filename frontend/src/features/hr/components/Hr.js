@@ -1,5 +1,5 @@
-import {Container} from "@mui/material";
-import {Fragment, useContext, useEffect} from "react";
+import {Container, IconButton} from "@mui/material";
+import {Fragment, useContext, useEffect, useState} from "react";
 import {DataGrid} from '@mui/x-data-grid';
 import Grid from "@mui/material/Grid";
 import {
@@ -14,11 +14,19 @@ import {HrContext} from "../context/hrContext";
 
 
 const Hr = () => {
-    const {getPage, popup, isLoading, rows, columns, page, closeEdit,init} = useContext(HrContext);
+    const {getPage, popup, isLoading, rows, columns, page, closeEdit, init, addSearchTerm,searchTerm} = useContext(HrContext);
+    const [searchText, setSearchText] = useState(searchTerm);
     const location = useLocation();
-    if(location.pathname.includes('edit')  === false&& popup){
+    if (location.pathname.includes('edit') === false && popup) {
         closeEdit();
     }
+    const handleSearch = (e) => {
+        e.preventDefault();
+        addSearchTerm(searchText);
+    };
+    const handleSearchChange = (e) => {
+        setSearchText(e.target.value);
+    };
     const handlePageChange = (page) => {
         getPage(page);
     };
@@ -54,12 +62,18 @@ const Hr = () => {
             }>
                 <Grid container spacing={3} justifyContent={'center'}>
                     <Grid item xs={12}/>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
+                    <Grid item xs={12} sm={6} component={"form"} onSubmit={handleSearch}>
+                        <FormControl
+                            fullWidth>
                             <OutlinedInput
+                                onChange={handleSearchChange}
+                                value={searchText}
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <SearchIcon/>
+                                        <IconButton type={"submit"}>
+                                            <SearchIcon/>
+                                        </IconButton>
+
                                     </InputAdornment>
                                 }
                             />

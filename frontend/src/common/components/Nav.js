@@ -21,7 +21,7 @@ import {AuthContext} from "../../features/auth/context/AuthContext";
 import {DarkModeContext} from "../../features/darkMode/DarkModeProvider";
 import Switch from "@material-ui/core/Switch";
 
-const Nav = ({pages, currentPage}) => {
+const Nav = ({pages, activePage}) => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const {toggleColorMode,isDark} = useContext(DarkModeContext);
@@ -102,7 +102,7 @@ const Nav = ({pages, currentPage}) => {
                         sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}
                     >
                         <Box sx={{display: 'flex'}}>
-                            {currentPage}
+                            {activePage}
                         </Box>
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>

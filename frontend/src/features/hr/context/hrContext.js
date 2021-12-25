@@ -16,11 +16,16 @@ const HrContextProvider = (props) => {
     const [popupData, setPopupData] = useState({});
     const [error, setError] = useState(null);
     const [firstLoad, setFirstLoad] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const Navigate = useNavigate()
     const location = useLocation()
     const {getToken} = useContext(AuthContext);
     const init = async ()=>{
         setFirstLoad(true);
+    }
+    const addSearchTerm= (search)=>{
+        setSearchTerm(search)
+        getPage(0,search);
     }
     const openEdit = (row) => {
         setPopupData(row);
@@ -54,10 +59,10 @@ const HrContextProvider = (props) => {
     const dismissError = () => {
         setError(null)
     }
-    const getPage = (page) => {
+    const getPage = (page , search ) => {
         setPage(page);
         setIsLoading(true);
-        Api.getEmployees(getToken(),page,10).then(
+        Api.getEmployees(getToken(),page,10,search).then(
             (res) => {
                 setRows(res.data)
                 setIsLoading(false);
@@ -169,7 +174,9 @@ const HrContextProvider = (props) => {
                 closeEdit,
                 deleteRow,
                 dismissError,
-                init
+                init,
+                addSearchTerm,
+                searchTerm,
             }
         }>
             {props.children}

@@ -11,7 +11,8 @@ export async function updateEmployeeById(token, id, data) {
 }
 
 
-const getEmployees = async (token,page , perPage) => {
+const getEmployees = async (token,page , perPage,searchTerm) => {
+    console.log(searchTerm);
     return await axios.get(`${config.api_url}/employee`, {
         headers: {
             "x-auth-token": token
@@ -19,6 +20,7 @@ const getEmployees = async (token,page , perPage) => {
         params: {
             page: page||0,
             limit: perPage || 10,
+            search : searchTerm || ""
         }
     });
 }

@@ -97,8 +97,11 @@ const SendEmailPage = () => {
                                         resize="none"
                                         style={{
                                             width: "100%",
+                                            backgroundColor :"inherit",
+                                            borderColor:"#adadad",
+
                                             borderRadius: "5px",
-                                            padding: "10px",
+                                            padding: "1%",
                                             resize: "none"
                                         }}
                                         label="subject"
