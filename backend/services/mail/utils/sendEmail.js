@@ -9,13 +9,12 @@ const transport = nodemailer.createTransport({
 });
 
 
-const sendEmail = async (email, message) => {
-    await transport.sendMail({
+const sendEmail = async (email, message, subject) => {
+    return transport.sendMail({
         from: 'cobra hotel',
         to: [email],
-        subject: 'forget password',
+        subject: subject,
         text: message,
-        html: message
     })
 }
 
