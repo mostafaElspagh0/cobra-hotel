@@ -12,18 +12,18 @@ import {EmailContextProvider} from "./features/mail/context/emailContext";
 
 ReactDOM.render(
     <React.StrictMode>
-        <AuthProvider>
+        <CssBaseline/>
+        <BrowserRouter>
             <DarkModeProvider>
-                <CssBaseline/>
-                <BrowserRouter>
+                <AuthProvider>
                     <EmailContextProvider>
                         <HrContextProvider>
                             <App/>
                         </HrContextProvider>
                     </EmailContextProvider>
-                </BrowserRouter>
+                </AuthProvider>
             </DarkModeProvider>
-        </AuthProvider>
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 );

@@ -1,6 +1,7 @@
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import decodeToken from "../utils/decodeToken";
 import * as Api from "../api/AuthApi"
+import {useLocation} from "react-router-dom";
 
 const AuthContext = createContext({
     isAuthenticated : false,
@@ -14,6 +15,7 @@ const AuthContext = createContext({
 });
 
 const AuthProvider = (props) => {
+    const location = useLocation()
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -26,6 +28,18 @@ const AuthProvider = (props) => {
         }
         return false;
     });
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decoded = decodeToken(token)
+            if (!decoded) {
+                localStorage.removeItem("token");
+                setIsAuthenticated(false);
+            }
+        } else {
+            setIsAuthenticated(false);
+        }
+    }, [location]);
     const [user, setUser] = useState(() => {
         const token = localStorage.getItem("token");
         if (token) {
