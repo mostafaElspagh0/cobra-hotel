@@ -11,6 +11,7 @@ import SendEmailPage from "./features/mail/component/SendEmailPage";
 import Announcement from "./features/Announcment/Announcement";
 import Arrival from "./features/arrival/component/Arrival";
 import Clean from "./features/Cleaning/Clean";
+import Storage from "./features/Storage/Storage";
 const Com = () => {
         let c = useParams();
         return <div>{c.id}</div>
@@ -31,6 +32,7 @@ function App() {
                     <Route path="Announcement" element={<RequireRole roles={['Manager',"Hr"]}><Announcement/></RequireRole>} />
                     <Route path="Arrival" element={<RequireRole roles={['Manager',"Hr"]}><Arrival/></RequireRole>} />
                     <Route path="Cleaning" element={<RequireRole roles={['Manager',"Hr"]}><Clean/></RequireRole>} />
+                    <Route path="Storage" element={<RequireRole roles={['Manager',"Hr"]}><Storage/></RequireRole>} />
                     <Route path=":id" element={<Com/>} />
                 </Route>
                 <Route path="/" element={<Navigate path='/' to='dashboard'/>} />

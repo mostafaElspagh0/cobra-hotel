@@ -57,7 +57,7 @@ const Storage =()=>
     return(
         <Container>
                 <Grid container sm={12} spacing={5}>
-                    <Grid item sm={12}></Grid>
+                    <Grid item sm={12}/>
                     <Grid container item sm={12} >
                         <Grid  item sm={4} display="flex" justifyContent="center">
                             <Button variant="contained" sx={{
@@ -80,7 +80,7 @@ const Storage =()=>
 
                 </Grid>
             <Grid container sm={12} spacing={5}>
-                <Grid item sm={12}></Grid>
+                <Grid item sm={12}/>
                 <Grid item sm={12} >
                     <div style={{ height: "100vh", width: '100%' }}>
                         <DataGrid
@@ -99,7 +99,3 @@ const Storage =()=>
 }
 export default Storage;
 
-
-<Grid container spacing={5} sm={12}>
-
-</Grid>
