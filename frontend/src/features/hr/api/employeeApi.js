@@ -12,7 +12,6 @@ export async function updateEmployeeById(token, id, data) {
 
 
 const getEmployees = async (token,page , perPage,searchTerm) => {
-    console.log(searchTerm);
     return await axios.get(`${config.api_url}/employee`, {
         headers: {
             "x-auth-token": token
@@ -35,12 +34,11 @@ const getEmployeeId = async (token, id) => {
 }
 
 const deleteEmployeeById = async (token, id) => {
-    const res = await axios.delete(`${config.api_url}/employee/${id}`, {
+    return await axios.delete(`${config.api_url}/employee/${id}`, {
         headers: {
             "x-auth-token": token
         }
     });
-    return res;
 }
 
 
