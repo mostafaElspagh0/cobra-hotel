@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../../../config/config";
 
 const sendEmailApi = async (token, to, subject, body) => {
-    return await axios.post(`${config.api_url}/employee`, {
+    return await axios.post(`${config.api_url}/email`, {
             "email": to,
             "subject": subject,
             "message": body,

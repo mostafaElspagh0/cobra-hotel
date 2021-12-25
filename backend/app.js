@@ -4,6 +4,7 @@ const config = require('config')
 const logger = require('morgan');
 const liveRouter = require('./routes/live');
 const authRouter = require('./routes/auth');
+const mainRouter = require('./routes/email');
 const bodyParser = require("body-parser");
 const app = express();
 const employeeRouter=require('./routes/employee');
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use('/', liveRouter);
 app.use('/live', liveRouter);
 app.use('/auth',authRouter);
+app.use('/email',mainRouter);
 
 app.use('/employee',employeeRouter);
 
