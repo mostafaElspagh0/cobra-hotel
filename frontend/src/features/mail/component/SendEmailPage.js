@@ -1,4 +1,4 @@
-import {Fragment} from "react";
+import {Fragment, useContext} from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -7,11 +7,19 @@ import * as React from "react";
 import Container from "@mui/material/Container";
 import {Controller, useForm} from "react-hook-form";
 import Box from "@mui/material/Box";
+import {EmailContext} from "../context/emailContext";
 
 const SendEmailPage = () => {
     const {handleSubmit, control} = useForm();
+    const {sendEmail,isLoading,error} = useContext(EmailContext);
+    if(isLoading){
+        return <div>Loading...</div>
+    }
+    if(error){
+        return <div>Error</div>
+    }
     const onSubmit = data => {
-        console.log(data);
+        sendEmail(data);
     };
     return (
         <Fragment>
@@ -19,29 +27,6 @@ const SendEmailPage = () => {
                 <Box component={"form"} onSubmit={handleSubmit(onSubmit)} noValidate>
                     <Grid container spacing={5}>
                         <Grid item xs={12}/>
-                        <Grid item xs={12} sm={6}>
-                            <Controller
-                                name="title"
-                                control={control}
-                                defaultValue=""
-                                render={({field: {onChange, value}, fieldState: {error}}) => (
-                                    <TextField
-                                        label="to"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={value}
-                                        onChange={onChange}
-                                        error={!!error}
-                                        helperText={error ? error.message : null}
-                                        type="text"
-                                    />
-                                )}
-                                rules={{
-                                    required: 'title is required',
-                                }}
-                            />
-                        </Grid>
                         <Grid item xs={12} sm={6}>
                             <Controller
                                 name="to"
@@ -69,6 +54,12 @@ const SendEmailPage = () => {
                                 }}
                             />
                         </Grid>
+                        <Grid item xs={12} sm={6} sx={{
+                            display : {
+                                xs:'none',
+                                sm:'block'
+                            }
+                        }}/>
                         <Grid item xs={12} sm={6}>
                             <Controller
                                 name="Subject"
