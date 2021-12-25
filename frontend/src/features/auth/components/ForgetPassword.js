@@ -10,20 +10,21 @@ import {useContext} from "react";
 import {DarkModeContext} from "../../darkMode/DarkModeProvider";
 import {useForm, Controller} from "react-hook-form";
 import CloseIcon from '@mui/icons-material/Close';
-import { Navigate , useNavigate } from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext";
 
-const SignInPage = () => {
+const ForgetPassword = ()=>{
     const {toggleColorMode,isDark} = useContext(DarkModeContext);
     const {handleSubmit, control} = useForm();
     const {status, error, dismissError} = useContext(AuthContext);
     const navigate = useNavigate();
     const {
-        signIn,
-        isAuthenticated
+        isAuthenticated,
+        forgetPassword
     } = useContext(AuthContext);
     const onSubmit = (data) => {
-        signIn(data.email, data.password);
+        forgetPassword(data.email);
+        //signIn(data.email, data.password);
     };
     if(isAuthenticated){
         return <Navigate to="/"/>
@@ -65,7 +66,6 @@ const SignInPage = () => {
                                 fullWidth
                                 required
                                 disabled={status === 'loading'}
-
                                 value={value}
                                 margin={'normal'}
                                 onChange={onChange}
@@ -82,30 +82,8 @@ const SignInPage = () => {
                             }
                         }}
                     />
-                    <Controller
-                        name="password"
-                        control={control}
-                        defaultValue=""
-                        render={({field: {onChange, value}, fieldState: {error}}) => (
-                            <TextField
-                                label="Password"
-                                variant="outlined"
-                                fullWidth
-                                disabled={status === 'loading'}
-                                required
-                                margin={'normal'}
-                                value={value}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="password"
-                            />
-                        )}
-                        rules={{
-                            required: 'Password required',
-                            minLength: {value: 8, message: 'Password must be at least 8 characters'}
-                        }}
-                    />
+
+
                     {status === 'error' && (
                         <Alert
                             severity="error"
@@ -124,6 +102,24 @@ const SignInPage = () => {
                         </Alert>
 
                     )}
+                    {status === 'success' && (
+                        <Alert
+                            severity="success"
+                            action={
+                                <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => dismissError()}
+                                >
+                                    <CloseIcon/>
+                                </IconButton>
+                            }
+                        >
+                            reset password link has been sent to your email
+                        </Alert>
+
+                    )}
                     {status === 'loading' && (
                         <CircularProgress/>
                     )}
@@ -139,16 +135,15 @@ const SignInPage = () => {
                         Sign In
                     </Button>
                     <Typography variant="body2" color="textSecondary" align="left">
-                        {'lost your password'}
+                        {'you have your password? '}
                         <Button
-                            onClick={() => {navigate('/forgot-password');dismissError()}}
+                            onClick={() => {navigate('/login'); dismissError()}}
                             variant="text"
                             color="primary"
                             disabled={status === 'loading'}
-
                             sx={{ml: 2}}
                         >
-                            Forgot password?
+                            login instead
                         </Button>
                     </Typography>
 
@@ -159,4 +154,4 @@ const SignInPage = () => {
 
 }
 
-export default SignInPage;
+export default ForgetPassword;

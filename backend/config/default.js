@@ -12,4 +12,8 @@ module.exports = {
   "SALT_WORK_FACTOR" : 10 ,
   "corsOrigin":"http://localhost:3000",
   "perPage":10,
+  "gmail":{
+    "user": 'cobrahotel5@gmail.com',
+    "pass": 'cobrahotelcobrahotel'
+  },
 };

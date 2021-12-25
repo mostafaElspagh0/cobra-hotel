@@ -8,6 +8,7 @@ import {CssBaseline} from "@mui/material";
 import {AuthProvider} from "./features/auth/context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
 import {HrContextProvider} from "./features/hr/context/hrContext";
+import {EmailContextProvider} from "./features/mail/context/emailContext";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -15,9 +16,11 @@ ReactDOM.render(
             <DarkModeProvider>
                 <CssBaseline/>
                 <BrowserRouter>
-                    <HrContextProvider>
-                    <App/>
-                    </HrContextProvider>
+                    <EmailContextProvider>
+                        <HrContextProvider>
+                            <App/>
+                        </HrContextProvider>
+                    </EmailContextProvider>
                 </BrowserRouter>
             </DarkModeProvider>
         </AuthProvider>

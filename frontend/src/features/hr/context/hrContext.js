@@ -15,9 +15,13 @@ const HrContextProvider = (props) => {
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
     const [error, setError] = useState(null);
+    const [firstLoad, setFirstLoad] = useState(false);
     const Navigate = useNavigate()
     const location = useLocation()
     const {getToken} = useContext(AuthContext);
+    const init = async ()=>{
+        setFirstLoad(true);
+    }
     const openEdit = (row) => {
         setPopupData(row);
         setPopup(true);
@@ -38,8 +42,8 @@ const HrContextProvider = (props) => {
         })
     }
 
-    const deleteRow = async (row) => {
-        return Api.deleteEmployeeById(getToken(), popupData._id).then(res => {
+    const deleteRow = async () => {
+        return Api.deleteEmployeeById(getToken(), popupData._id).then(() => {
             setError(null);
             setRows({count: rows.count -1, users: rows.users.filter(r => r._id !== popupData._id)})
         }).catch(err => {
@@ -62,24 +66,30 @@ const HrContextProvider = (props) => {
     }
 
     useEffect(() => {
-        async function j(){
-            getPage(0);
-            if(location.pathname.includes('edit')){
-                setIsLoading(true);
-                let id = location.pathname.split('/')[4]
-                Api.getEmployeeId(getToken(), id).then(res => {
-                    setPopupData(res)
-                    setPopup(true)
-                    setIsLoading(false);
-                })
-            }
-            else{
-                getPage(0);
-            }
-        }
-        j()
+        if(firstLoad){
 
-    }, []);
+
+            async function j(){
+
+                getPage(0);
+                if(location.pathname.includes('edit')){
+                    setIsLoading(true);
+                    let id = location.pathname.split('/')[4]
+                    Api.getEmployeeId(getToken(), id).then(res => {
+                        setPopupData(res)
+                        setPopup(true)
+                        setIsLoading(false);
+                    })
+                }
+                else{
+                    getPage(0);
+                }
+            }
+            j()
+        }
+
+
+    }, [firstLoad]);
 
     const columns = [
         {
@@ -158,7 +168,8 @@ const HrContextProvider = (props) => {
                 updateRow,
                 closeEdit,
                 deleteRow,
-                dismissError
+                dismissError,
+                init
             }
         }>
             {props.children}
