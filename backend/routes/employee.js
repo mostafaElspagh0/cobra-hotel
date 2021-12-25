@@ -140,8 +140,22 @@ router.get("/",
         const search = req.query.search
         if (search) {
             try {
-                const users = await User.find({$or:[{name: {$regex: search, $options: 'i'}},{email: {$regex: search, $options: 'i'}}]}).skip(perPage * page).limit(perPage);
-                const count = await User.countDocuments({name: {$regex: search, $options: 'i'}});
+                const users = await User.find({
+                    $or: [{name: {$regex: search, $options: 'i'}}, {
+                        email: {
+                            $regex: search,
+                            $options: 'i'
+                        }
+                    }]
+                }).skip(perPage * page).limit(perPage);
+                const count = await User.countDocuments({
+                    $or: [{
+                        name: {
+                            $regex: search,
+                            $options: 'i'
+                        }
+                    }, {email: {$regex: search, $options: 'i'}}]
+                });
                 res.json({users, count});
             } catch (err) {
                 console.error(err.message);
