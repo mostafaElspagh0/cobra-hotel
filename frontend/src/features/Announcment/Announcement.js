@@ -7,75 +7,142 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Button from "@mui/material/Button";
 import drawing from "../arrival/resource/drawing.png";
 import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import {Controller, useForm} from "react-hook-form";
+import MenuItem from "@mui/material/MenuItem";
+import SelectInput from "@material-ui/core/Select/SelectInput";
+import {Select} from "@mui/material";
 
-const Announcement =()=>
-{
-    return(
+const Announcement = () => {
+    const {control, handleSubmit} = useForm();
+    const itemsSelected = new Set()
+    const onSubmit = data => {
+        console.log(data);
+    };
+    return (
         <Fragment>
             <Container>
-                <Grid container lg={12} spacing={6}  >
+                <Box component={"form"} onSubmit={handleSubmit(onSubmit)} noValidate>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12}/>
+                        <Grid item xs={12} sm={6}>
 
-                    <Grid  container item lg={6}   spacing={6}>
-                        <Grid item > </Grid>
-                        <Grid item > </Grid>
+                            <Controller
+                                name="to"
+                                control={control}
+                                defaultValue=""
+                                render={({field: {onChange, value}, fieldState: {error}}) => (
+                                    <Select
+                                        label="to"
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        error={!!error}
+                                        select
+                                        renderValue={(selected) => {
+                                            itemsSelected.add(selected)
+                                            console.log(itemsSelected)
+                                            return selected;
+                                            // return selected.value;
+                                            // // return (
+                                            // //     selected.map((option) => option.name).join(", ") ||
+                                            // //     "Select some options"
+                                            // // );
+                                        }}
+                                        SelectProps={{
+                                            multiple: true,
+                                            value: [value],
+                                            onChange: onChange
+                                        }}
+                                        helperText={error ? error.message : null}
+                                        type="email"
+                                    >
 
-                                <Grid item xs={12}>
-
-                                    <TextField id="outlined-search" label="Title" type="search"
-                                               style={{
-                                                   width:'25vw'
-                                               }}
-                                    />
-
-                                </Grid>
-                            <Grid item xs={12}>
-
-                                <TextField id="outlined-search" label="Subject" type="search"
-                                           style={{
-                                               width:'30vw'
-                                           }}
-                                />
-
-                            </Grid>
-                            <Grid item xs={12}>
-                            <TextareaAutosize
-                                aria-label="minimum height"
-                                minRows={13}
-                                placeholder="Your Announcement"
-                                style={{ width:"40vw",
-                                    backgroundColor :"inherit",
-                                    borderColor:"#adadad",
-                                    borderRadius:"6px",
-                                    padding:"1%"
+                                        <MenuItem value="admin">Admin</MenuItem>
+                                        <MenuItem value="user1">User1</MenuItem>
+                                        <MenuItem value="user2">User2</MenuItem>
+                                    </Select>
+                                )}
+                                rules={{
+                                    required: 'Email required',
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                        message: 'invalid email address'
+                                    }
                                 }}
                             />
-                            </Grid>
-                            <Grid item >
-                                <Grid item></Grid>
-                                <Button variant="contained" sx={{
-                                    color:"white",
-                                    width:'15vw'
+                        </Grid>
+                        <Grid item xs={12} sm={6} sx={{
+                            display: {
+                                xs: 'none',
+                                sm: 'block'
+                            }
+                        }}/>
+                        <Grid item xs={12} sm={6}>
+                            <Controller
+                                name="Subject"
+                                control={control}
+                                defaultValue=""
+                                render={({field: {onChange, value}, fieldState: {error}}) => (
+                                    <TextField
+                                        label="subject"
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={error ? error.message : null}
+                                        type="text"
+                                    />
+                                )}
+                                rules={{
+                                    required: 'subject is required',
                                 }}
-                                >
-                                    Push Announcement
+                            />
 
-                                </Button>
-                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Controller
+                                name="body"
+                                control={control}
+                                defaultValue=""
+                                render={({field: {onChange, value}, fieldState: {error}}) => (
+                                    <TextareaAutosize
+                                        aria-label="minimum height"
+                                        minRows={8}
+                                        placeholder="Your E-mail"
+                                        resize="none"
+                                        style={{
+                                            width: "100%",
+                                            backgroundColor: "inherit",
+                                            borderColor: "#adadad",
+
+                                            borderRadius: "5px",
+                                            padding: "1%",
+                                            resize: "none"
+                                        }}
+                                        label="subject"
+                                        required
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={error ? error.message : null}
+                                        type="text"
+                                    />
+                                )}
+                                rules={{
+                                    required: 'subject is required',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="contained" type={"submit"}>
+                                Send E-mail
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item lg={6}  display="flex" justifyContent="center" alignItems="center">
-                        <CardMedia
-                            component="img"
-                            alt="green iguana"
-
-                            image={drawing}
-                            style={{
-                                width:'20vw',
-                                height:'40vh'
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-
+                </Box>
             </Container>
         </Fragment>
     );

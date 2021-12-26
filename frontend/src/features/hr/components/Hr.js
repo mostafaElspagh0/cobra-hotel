@@ -11,10 +11,22 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import {Outlet, useLocation} from "react-router-dom";
 import {HrContext} from "../context/hrContext";
+import Button from "@mui/material/Button";
 
 
 const Hr = () => {
-    const {getPage, popup, isLoading, rows, columns, page, closeEdit, init, addSearchTerm,searchTerm} = useContext(HrContext);
+    const {
+        getPage,
+        popup,
+        isLoading,
+        rows,
+        columns,
+        page,
+        closeEdit,
+        init,
+        addSearchTerm,
+        searchTerm
+    } = useContext(HrContext);
     const [searchText, setSearchText] = useState(searchTerm);
     const location = useLocation();
     if (location.pathname.includes('edit') === false && popup) {
@@ -60,9 +72,9 @@ const Hr = () => {
                     pointerEvents: 'none'
                 } : {}
             }>
-                <Grid container spacing={3} justifyContent={'center'}>
+                <Grid container spacing={3} justifyContent={'center'} >
                     <Grid item xs={12}/>
-                    <Grid item xs={12} sm={6} component={"form"} onSubmit={handleSearch}>
+                    <Grid item xs={8} component={"form"} onSubmit={handleSearch}>
                         <FormControl
                             fullWidth>
                             <OutlinedInput
@@ -78,6 +90,16 @@ const Hr = () => {
                                 }
                             />
                         </FormControl>
+                    </Grid>
+                    <Grid item xs={4} alignSelf={"center"}>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            fullWidth
+                            size={"large"}
+                            >
+                                Add
+                        </Button>
                     </Grid>
                     <Grid item xs={12}>
                         <DataGrid

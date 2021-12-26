@@ -32,6 +32,24 @@ const HrContextProvider = (props) => {
         setPopup(true);
         Navigate(`/dashboard/Employee/edit/${row._id}`)
     }
+    const openAdd = () => {
+        setPopupData({});
+        setPopup(true);
+        Navigate(`/dashboard/Employee/add`)
+    }
+    // const addEmployee = (data) =>{
+    //     setPopup(false);
+    //     setIsLoading(true);
+    //     Api.addEmployee(data, getToken())
+    //         .then(res => {
+    //             setIsLoading(false);
+    //             getPage(0);
+    //         })
+    //         .catch(err => {
+    //             setIsLoading(false);
+    //             setError(err.message);
+    //         })
+    // }
     const closeEdit = () => {
         setPopup(false);
         Navigate(`/dashboard/Employee`)
