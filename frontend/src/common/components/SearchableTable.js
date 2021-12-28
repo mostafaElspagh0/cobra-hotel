@@ -3,35 +3,91 @@ import {Fragment, useContext, useEffect, useState} from "react";
 import {DataGrid} from '@mui/x-data-grid';
 import Grid from "@mui/material/Grid";
 import {
+    ButtonGroup,
     FormControl,
     InputAdornment,
     OutlinedInput,
-    Paper,
 } from "@material-ui/core";
 import SearchIcon from '@mui/icons-material/Search';
-import {Outlet, useLocation} from "react-router-dom";
-import {HrContext} from "../context/hrContext";
+import {Outlet, useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import * as React from "react";
+import {PopupContext} from "../contexts/PopupContext";
+import Pop2up from "./Popup";
+import GradingTwoToneIcon from '@mui/icons-material/GradingTwoTone';
+import {SearchableTableContext} from "../contexts/SearchableTableContext";
+import Popup from "./Popup";
 
 
-const Hr = () => {
+const SearchableTable = (props) => {
     const {
         getPage,
-        popup,
         isLoading,
         rows,
-        columns,
         page,
-        closeEdit,
         init,
         addSearchTerm,
-        searchTerm
-    } = useContext(HrContext);
+        searchTerm,
+    } = useContext(SearchableTableContext);
+    const Navigate = useNavigate();
+    const {
+        openPopup,
+        popup
+    } = useContext(PopupContext);
     const [searchText, setSearchText] = useState(searchTerm);
-    const location = useLocation();
-    if (location.pathname.includes('edit') === false && popup) {
-        closeEdit();
-    }
+    const columns = [
+        {
+            field: '_id',
+            headerName: 'Edit',
+            renderCell: (e) => {
+                return (
+                    <ButtonGroup
+                       color={"primary"}
+                       variant={"text"}
+                    >
+                        <IconButton onClick={
+                            (k) => {
+                                openPopup(e.row)
+                                Navigate(`/dashboard/Employee/edit/${e.row._id}`)
+                            }
+                        }>
+                            <EditIcon/>
+                        </IconButton>
+                        <IconButton onClick={
+                            (k) => {
+                                openPopup(e.row)
+                                Navigate(`/dashboard/Employee/review/${e.row._id}`)
+                            }
+                        }>
+                            <GradingTwoToneIcon/>
+                        </IconButton>
+                    </ButtonGroup>
+                )
+            },
+            sortable: false,
+            filterable: false,
+        },
+        {
+            field: 'name',
+            headerName: 'Name',
+            width: 200,
+            sortable: false,
+            filterable: false
+        },
+        {
+            field: 'job_type',
+            headerName: 'job',
+            sortable: false,
+            filterable: false
+        },
+        {
+            field: 'email', headerName: 'email',
+            width: 250,
+            sortable: false,
+            filterable: false
+        }
+    ]
     const handleSearch = (e) => {
         e.preventDefault();
         addSearchTerm(searchText);
@@ -47,21 +103,11 @@ const Hr = () => {
     }, []);
     return (
         <Fragment>
-            {popup &&
-                <Paper
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '80%',
-                        height: '80%',
-                        padding: '20px',
-                        zIndex: '1000'
-                    }}>
-                    <Outlet/>
-                </Paper>
-            }
+
+            <Popup>
+                <Outlet/>
+            </Popup>
+
             <Container style={
                 (popup) ? {
                     WebkitFilter: 'blur(5px)',
@@ -72,7 +118,7 @@ const Hr = () => {
                     pointerEvents: 'none'
                 } : {}
             }>
-                <Grid container spacing={3} justifyContent={'center'} >
+                <Grid container spacing={3} justifyContent={'center'}>
                     <Grid item xs={12}/>
                     <Grid item xs={8} component={"form"} onSubmit={handleSearch}>
                         <FormControl
@@ -85,7 +131,6 @@ const Hr = () => {
                                         <IconButton type={"submit"}>
                                             <SearchIcon/>
                                         </IconButton>
-
                                     </InputAdornment>
                                 }
                             />
@@ -97,8 +142,12 @@ const Hr = () => {
                             color={"primary"}
                             fullWidth
                             size={"large"}
-                            >
-                                Add
+                            onClick={() => {
+                                openPopup();
+                                Navigate(`/dashboard/Employee/add`)
+                            }}>
+
+                            Add
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
@@ -130,4 +179,4 @@ const Hr = () => {
         </Fragment>
     );
 }
-export default Hr;
+export default SearchableTable;

@@ -107,6 +107,7 @@ const Nav = ({pages, activePage}) => {
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         <ButtonGroup
+                            variant="contained"
                             disableElevation>
                             {pages.map((page) => (
                                 <Button

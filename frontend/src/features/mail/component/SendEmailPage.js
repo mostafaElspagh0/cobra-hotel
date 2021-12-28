@@ -108,8 +108,6 @@ const SendEmailPage = () => {
                                         required
                                         value={value}
                                         onChange={onChange}
-                                        error={!!error}
-                                        helperText={error ? error.message : null}
                                         type="text"
                                     />
                                 )}

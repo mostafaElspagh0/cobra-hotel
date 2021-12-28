@@ -6,7 +6,7 @@ import {
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {useForm, Controller} from "react-hook-form";
-import {ZalapyaContext} from "../context/zalapyaContext";
+import {HrContext} from "../context/hrContext";
 import Grid from "@mui/material/Grid";
 import {PopupContext} from "../../../common/contexts/PopupContext";
 import * as Api from "../api/employeeApi";
@@ -16,7 +16,7 @@ const EditEmployee = () => {
     const {handleSubmit, control, setValue} = useForm();
     const [isLoading] = React.useState(false);
 
-    const {updateRows,rows} = useContext(ZalapyaContext);
+    const {updateRows,rows} = useContext(HrContext);
     const {getToken} = useContext(AuthContext);
     const {getPopupData, closePopup} = useContext(PopupContext);
 

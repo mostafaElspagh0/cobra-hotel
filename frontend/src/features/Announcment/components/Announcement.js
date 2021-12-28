@@ -1,23 +1,21 @@
-import {Fragment} from "react";
+import {Fragment, useContext} from "react";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Button from "@mui/material/Button";
-import drawing from "../arrival/resource/drawing.png";
-import CardMedia from "@mui/material/CardMedia";
 import Box from "@mui/material/Box";
 import {Controller, useForm} from "react-hook-form";
 import MenuItem from "@mui/material/MenuItem";
-import SelectInput from "@material-ui/core/Select/SelectInput";
-import {Select} from "@mui/material";
+import * as Api from "../api/announcmentApi";
+import {AuthContext} from "../../auth/context/AuthContext";
 
 const Announcement = () => {
     const {control, handleSubmit} = useForm();
-    const itemsSelected = new Set()
+    const {getToken} = useContext(AuthContext);
     const onSubmit = data => {
-        console.log(data);
+        Api.addAnnouncement(getToken(),data);
     };
     return (
         <Fragment>
@@ -26,49 +24,34 @@ const Announcement = () => {
                     <Grid container spacing={5}>
                         <Grid item xs={12}/>
                         <Grid item xs={12} sm={6}>
-
                             <Controller
-                                name="to"
+                                name="target_audience"
                                 control={control}
-                                defaultValue=""
+                                defaultValue="All"
                                 render={({field: {onChange, value}, fieldState: {error}}) => (
-                                    <Select
-                                        label="to"
+                                    <TextField
+                                        label="To"
                                         variant="outlined"
                                         fullWidth
+                                        select
                                         required
                                         error={!!error}
-                                        select
-                                        renderValue={(selected) => {
-                                            itemsSelected.add(selected)
-                                            console.log(itemsSelected)
-                                            return selected;
-                                            // return selected.value;
-                                            // // return (
-                                            // //     selected.map((option) => option.name).join(", ") ||
-                                            // //     "Select some options"
-                                            // // );
-                                        }}
                                         SelectProps={{
-                                            multiple: true,
                                             value: [value],
                                             onChange: onChange
                                         }}
                                         helperText={error ? error.message : null}
-                                        type="email"
+                                        type="text"
                                     >
-
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="user1">User1</MenuItem>
-                                        <MenuItem value="user2">User2</MenuItem>
-                                    </Select>
+                                        <MenuItem value="All">All</MenuItem>
+                                        <MenuItem value="Manager">Managers</MenuItem>
+                                        <MenuItem value="Hr">Hr team</MenuItem>
+                                        <MenuItem value="Receptionist">Receptionists</MenuItem>
+                                        <MenuItem value="Barista">Baristas</MenuItem>
+                                    </TextField>
                                 )}
                                 rules={{
-                                    required: 'Email required',
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                                        message: 'invalid email address'
-                                    }
+                                    required: 'this field is required'
                                 }}
                             />
                         </Grid>
@@ -80,12 +63,12 @@ const Announcement = () => {
                         }}/>
                         <Grid item xs={12} sm={6}>
                             <Controller
-                                name="Subject"
+                                name="title"
                                 control={control}
                                 defaultValue=""
                                 render={({field: {onChange, value}, fieldState: {error}}) => (
                                     <TextField
-                                        label="subject"
+                                        label="title"
                                         variant="outlined"
                                         fullWidth
                                         required
@@ -111,7 +94,7 @@ const Announcement = () => {
                                     <TextareaAutosize
                                         aria-label="minimum height"
                                         minRows={8}
-                                        placeholder="Your E-mail"
+                                        placeholder="Announcement body"
                                         resize="none"
                                         style={{
                                             width: "100%",
@@ -126,8 +109,6 @@ const Announcement = () => {
                                         required
                                         value={value}
                                         onChange={onChange}
-                                        error={!!error}
-                                        helperText={error ? error.message : null}
                                         type="text"
                                     />
                                 )}
@@ -138,7 +119,7 @@ const Announcement = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Button variant="contained" type={"submit"}>
-                                Send E-mail
+                                add announcement
                             </Button>
                         </Grid>
                     </Grid>

@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import {Alert} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {useForm, Controller} from "react-hook-form";
-import {ZalapyaContext} from "../context/zalapyaContext";
+import {HrContext} from "../context/hrContext";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import * as Api from "../api/employeeApi";
@@ -22,7 +22,7 @@ const CreateEmployee = () => {
     const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState("");
-    const {updateRows} = useContext(ZalapyaContext);
+    const {updateRows} = useContext(HrContext);
     const {closePopup} = useContext(PopupContext);
     const onCreate = (data) => {
         setIsLoading(true);
