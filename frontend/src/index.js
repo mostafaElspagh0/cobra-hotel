@@ -7,7 +7,7 @@ import DarkModeProvider from "./features/darkMode/DarkModeProvider";
 import {CssBaseline} from "@mui/material";
 import {AuthProvider} from "./features/auth/context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
-import {HrContextProvider} from "./features/hr/context/hrContext";
+import {ZalapyaTableContextProvider} from "./features/hr/context/zalapyaContext";
 import {EmailContextProvider} from "./features/mail/context/emailContext";
 
 ReactDOM.render(
@@ -17,9 +17,9 @@ ReactDOM.render(
             <DarkModeProvider>
                 <AuthProvider>
                     <EmailContextProvider>
-                        <HrContextProvider>
+                        <ZalapyaTableContextProvider>
                             <App/>
-                        </HrContextProvider>
+                        </ZalapyaTableContextProvider>
                     </EmailContextProvider>
                 </AuthProvider>
             </DarkModeProvider>

@@ -37,20 +37,20 @@ const DashBoardPage = () => {
                     return <div>Dashboard</div>
                 }
             },
-            'Orders': {
-                name: "Orders",
-                path: "Orders",
-                component: () => {
-                    return <div>Dashboard</div>
-                }
-            },
-            'Storage': {
-                name: "Storage",
-                path: "Storage",
-                component: () => {
-                    return <div>Dashboard</div>
-                }
-            },
+            // 'Orders': {
+            //     name: "Orders",
+            //     path: "Orders",
+            //     component: () => {
+            //         return <div>Dashboard</div>
+            //     }
+            // },
+            // 'Storage': {
+            //     name: "Storage",
+            //     path: "Storage",
+            //     component: () => {
+            //         return <div>Dashboard</div>
+            //     }
+            // },
             'Arrival': {
                 name: "Arrival",
                 path: "Arrival",
@@ -64,6 +64,13 @@ const DashBoardPage = () => {
                 component: () => {
                     return <div>Dashboard</div>
                 }
+            },
+            'Reservation': {
+                name: "Reservation",
+                path: "Reservation",
+                component: () => {
+                    return <div>Dashboard</div>
+                }
             }
         };
         let ret = [];
@@ -73,10 +80,11 @@ const DashBoardPage = () => {
                     pages['Employee'],
                     pages['Announcement'],
                     pages['Send E-mail'],
-                    pages['Orders'],
-                    pages['Storage'],
+                    // pages['Orders'],
+                    // pages['Storage'],
                     pages['Arrival'],
-                    pages['Cleaning']
+                    pages['Cleaning'],
+                    pages['Reservation']
                 ];
                 break;
             case 'Hr':
@@ -91,13 +99,14 @@ const DashBoardPage = () => {
                     pages['Orders'],
                     pages['Storage'],
                     pages['Arrival'],
-                    pages['Cleaning']
+                    pages['Cleaning'],
+                    pages['Reservation']
                 ];
                 break;
             case 'Barista':
                 ret = [
-                    pages['Orders'],
-                    pages['Storage'],
+                    // pages['Orders'],
+                    // pages['Storage'],
                 ];
                 break;
             default:

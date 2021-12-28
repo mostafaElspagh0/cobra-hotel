@@ -20,6 +20,13 @@ function dbURI() {
 
 function registerModels() {
     require ('./models/user');
+    require ('./models/customer');
+    require ('./models/announcement');
+    require ('./models/item');
+    require ('./models/reservation');
+    require ('./models/review');
+    require ('./models/room');
+
 }
 
 function registerEventHandlers() {

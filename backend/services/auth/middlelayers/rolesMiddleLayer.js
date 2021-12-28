@@ -10,7 +10,7 @@ const isA = (job_types) => {
             if (!decoded) {
                 return res.status(401).json({errors: [{msg: 'Invalid Token ,authorization denied '}]});
             }
-            if (!job_types.includes(decoded.user.job_type)) {
+            if (!job_types.includes(decoded.user.job_type) && !job_types.includes("All")) {
                 return res.status(401).json({errors: [{msg: 'you ara not authorization'}]})
             }
             req.user = decoded.user;

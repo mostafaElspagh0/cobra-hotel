@@ -45,7 +45,12 @@ const userScheme = new Schema(
         updated_at: {
             type: Date,
             default: Date.now
-        }
+        },
+        reviews: [{
+            type: Schema.Types.ObjectId,
+            ref: 'review',
+            default: []
+        }],
     }
 )
 

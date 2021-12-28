@@ -1,25 +1,21 @@
 import {Fragment, useContext} from "react";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import Button from "@mui/material/Button";
 import * as React from "react";
+import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import {Controller, useForm} from "react-hook-form";
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import {EmailContext} from "../context/emailContext";
+import {Controller, useForm} from "react-hook-form";
+import MenuItem from "@mui/material/MenuItem";
+import * as Api from "../api/announcmentApi";
+import {AuthContext} from "../../auth/context/AuthContext";
 
-const SendEmailPage = () => {
-    const {handleSubmit, control} = useForm();
-    const {sendEmail,isLoading,error} = useContext(EmailContext);
-    if(isLoading){
-        return <div>Loading...</div>
-    }
-    if(error){
-        return <div>Error</div>
-    }
+const Announcement = () => {
+    const {control, handleSubmit} = useForm();
+    const {getToken} = useContext(AuthContext);
     const onSubmit = data => {
-        sendEmail(data);
+        Api.addAnnouncement(getToken(),data);
     };
     return (
         <Fragment>
@@ -29,45 +25,50 @@ const SendEmailPage = () => {
                         <Grid item xs={12}/>
                         <Grid item xs={12} sm={6}>
                             <Controller
-                                name="to"
+                                name="target_audience"
                                 control={control}
-                                defaultValue=""
+                                defaultValue="All"
                                 render={({field: {onChange, value}, fieldState: {error}}) => (
                                     <TextField
-                                        label="to"
+                                        label="To"
                                         variant="outlined"
                                         fullWidth
+                                        select
                                         required
-                                        value={value}
-                                        onChange={onChange}
                                         error={!!error}
+                                        SelectProps={{
+                                            value: [value],
+                                            onChange: onChange
+                                        }}
                                         helperText={error ? error.message : null}
-                                        type="email"
-                                    />
+                                        type="text"
+                                    >
+                                        <MenuItem value="All">All</MenuItem>
+                                        <MenuItem value="Manager">Managers</MenuItem>
+                                        <MenuItem value="Hr">Hr team</MenuItem>
+                                        <MenuItem value="Receptionist">Receptionists</MenuItem>
+                                        <MenuItem value="Barista">Baristas</MenuItem>
+                                    </TextField>
                                 )}
                                 rules={{
-                                    required: 'Email required',
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                                        message: 'invalid email address'
-                                    }
+                                    required: 'this field is required'
                                 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} sx={{
-                            display : {
-                                xs:'none',
-                                sm:'block'
+                            display: {
+                                xs: 'none',
+                                sm: 'block'
                             }
                         }}/>
                         <Grid item xs={12} sm={6}>
                             <Controller
-                                name="Subject"
+                                name="title"
                                 control={control}
                                 defaultValue=""
                                 render={({field: {onChange, value}, fieldState: {error}}) => (
                                     <TextField
-                                        label="subject"
+                                        label="title"
                                         variant="outlined"
                                         fullWidth
                                         required
@@ -93,12 +94,12 @@ const SendEmailPage = () => {
                                     <TextareaAutosize
                                         aria-label="minimum height"
                                         minRows={8}
-                                        placeholder="Your E-mail"
+                                        placeholder="Announcement body"
                                         resize="none"
                                         style={{
                                             width: "100%",
-                                            backgroundColor :"inherit",
-                                            borderColor:"#adadad",
+                                            backgroundColor: "inherit",
+                                            borderColor: "#adadad",
 
                                             borderRadius: "5px",
                                             padding: "1%",
@@ -118,15 +119,14 @@ const SendEmailPage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Button variant="contained" type={"submit"}>
-                                Send E-mail
+                                add announcement
                             </Button>
                         </Grid>
                     </Grid>
                 </Box>
             </Container>
         </Fragment>
-
-
     );
 }
-export default SendEmailPage;
+
+export default Announcement;
