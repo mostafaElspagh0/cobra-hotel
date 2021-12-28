@@ -17,6 +17,7 @@ import CreateEmployee from "./features/hr/components/createEmployee";
 import ReviewEmployee from "./features/hr/components/ReviewEmployee";
 import Reservation from "./features/hr2/components/Reservation";
 import ResetPassword from "./features/auth/components/ResetPassword";
+import {CssBaseline} from "@mui/material";
 
 const Com = () => {
     let c = useParams();
@@ -27,6 +28,7 @@ const Com = () => {
 function App() {
     return (
         <Fragment>
+            <CssBaseline/>
             <Routes>
                 <Route path="/login" element={<SignInPage/>}/>
                 <Route path="/forgot-password" element={<ForgetPassword/>}/>
