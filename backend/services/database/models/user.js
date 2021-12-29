@@ -58,6 +58,7 @@ userScheme.pre('save',function(next){
     const user =this;
     if (!user.isModified('password')) return next();
     bcrypt.genSalt(config.get("SALT_WORK_FACTOR"),function(err,salt){
+        console.log(err);
         if(err)return  next(err);
         bcrypt.hash(user.password,salt,function (err,hash){
             if(err) return next(err);
