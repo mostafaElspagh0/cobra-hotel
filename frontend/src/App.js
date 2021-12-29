@@ -19,6 +19,8 @@ import Reservation from "./features/reservation/components/Reservation";
 import ResetPassword from "./features/auth/components/ResetPassword";
 import {CssBaseline} from "@mui/material";
 import AnnouncementViews from "./features/Announcment/components/AnnouncementViews";
+import AddReservation from "./features/reservation/components/AddReservation";
+import EditReservation from "./features/reservation/components/EditResrvation";
 
 const Com = () => {
     let c = useParams();
@@ -64,18 +66,21 @@ function App() {
                                 <Reservation/>
                             </PopupContextProvider>
                         </RequireRole>}/>
-                    <Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}>
-                        <PopupContextProvider>
-                            <Reservation/>
-                        </PopupContextProvider>
-                    </RequireRole>}/>
-                    <Route path="Storage" element={<RequireRole roles={['Manager', "Hr"]}><Storage/></RequireRole>}/>
+                    {/*<Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}>*/}
+                    {/*    <PopupContextProvider>*/}
+                    {/*        <Reservation/>*/}
+                    {/*    </PopupContextProvider>*/}
+                    {/*</RequireRole>}/>*/}
+                    {/*<Route path="Storage" element={<RequireRole roles={['Manager', "Hr"]}><Storage/></RequireRole>}/>*/}
                     <Route path="Reservation" element={
                         <RequireRole roles={['Manager', "Hr"]}>
                             <PopupContextProvider>
                                 <Reservation/>
                             </PopupContextProvider>
-                        </RequireRole>}/>
+                        </RequireRole>}>
+                        <Route path="edit/:id" element={<EditReservation/>}/>
+                        <Route path="add" element={<AddReservation/>}/>
+                    </Route>
 
                     <Route path="Rooms" element={
                         <RequireRole roles={['Manager', "Hr"]}>

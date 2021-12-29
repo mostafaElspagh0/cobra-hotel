@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     CircularProgress,
     IconButton,
@@ -6,29 +6,47 @@ import {
 } from "@material-ui/core";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {Alert} from "@mui/material";
+import {Alert, CssBaseline} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {useForm, Controller} from "react-hook-form";
-import {HrContext} from "../context/hrContext";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import * as Api from "../api/employeeApi";
+import * as Api from "../api/reservationApi";
 import {AuthContext} from "../../auth/context/AuthContext";
 import {PopupContext} from "../../../common/contexts/PopupContext";
+import {ReservationContext} from "../context/reservationContext";
+import popup from "../../../common/components/Popup";
 
-const CreateEmployee = () => {
-    const {handleSubmit, control} = useForm();
+const EditReservation = (props) => {
+    const {handleSubmit, control,setValue} = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState("");
-    const {updateRows} = useContext(HrContext);
-    const {closePopup} = useContext(PopupContext);
+    const {updateRows} = useContext(ReservationContext);
+    const {closePopup,getPopupData} = useContext(PopupContext);
+    useEffect(()=>{
+        try{
+        if(getPopupData()) {
+
+            setValue("startDate", getPopupData().startDate.slice(0, 10))
+            setValue("endDate", getPopupData().endDate.slice(0, 10))
+            setValue("roomId", getPopupData().room.roomId)
+            setValue("type", getPopupData().type)
+        }}catch(e){
+
+        }
+    },[popup])
+
     const onCreate = (data) => {
+        // Api.editReservation(get)
+        // console.log(data);
+        // console.log(getPopupData());
+        // console.log(new Date(getPopupData().startDate).toLocaleDateString())
         setIsLoading(true);
         setIsError(false);
         setErrorMessage("");
-        Api.addEmployee(getToken(), data)
+        Api.editReservation(getToken(),getPopupData()._id,data)
             .then(() => {
                 setIsLoading(false);
                 updateRows().then(() => {
@@ -42,16 +60,34 @@ const CreateEmployee = () => {
             });
 
     };
+    const onDelete = () => {
+        setIsLoading(true);
+        setIsError(false);
+        setErrorMessage("");
+        Api.deleteReservation(getToken(),getPopupData()._id)
+            .then(() => {
+                setIsLoading(false);
+                updateRows().then(() => {
+                    closePopup()
+                });
+            })
+            .catch(error => {
+                setIsLoading(false);
+                setIsError(true);
+                setErrorMessage(error.message);
+            });
+    };
     return (
         <Box component="form" onSubmit={handleSubmit(onCreate)} noValidate sx={{mt: 1}}>
+            <CssBaseline/>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="name"
+                        name="startDate"
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="name"
+                                label="Start Date"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -61,7 +97,7 @@ const CreateEmployee = () => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                type="text"
+                                type="date"
 
                             />
                         )}
@@ -72,12 +108,12 @@ const CreateEmployee = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="job_type"
-                        defaultValue={"Manager"}
+                        name="type"
+                        defaultValue={"full"}
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="job"
+                                label="type"
                                 variant="outlined"
                                 fullWidth
                                 select
@@ -90,31 +126,23 @@ const CreateEmployee = () => {
                                 helperText={error ? error.message : null}
                                 type="text"
                             >
-
-                                <MenuItem value='Manager'>Manager</MenuItem>
-                                <MenuItem value='Hr'>HR</MenuItem>
-                                <MenuItem value='Receptionist'>Receptionist</MenuItem>
-                                <MenuItem value="Barista">Barista</MenuItem>
+                                <MenuItem value='full'>full</MenuItem>
+                                <MenuItem value='b&b'>b&b</MenuItem>
+                                <MenuItem value='half'>half</MenuItem>
                             </TextField>
                         )}
                         rules={{
-                            required: 'job is required',
-                            validate: (value) => {
-                               if(['Manager','Hr','Receptionist','Barista'].includes(value)){
-                                   return true;
-                               }
-                                return 'Please select a valid job type';
-                            }
+                            required: 'reservation type is required',
                         }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="email"
+                        name="endDate"
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="email"
+                                label="End Date"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -124,25 +152,21 @@ const CreateEmployee = () => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                type="email"
+                                type="date"
                             />
                         )}
                         rules={{
-                            required: 'email is required',
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                                message: 'invalid email address',
-                            },
+                            required: 'end date is required',
                         }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="phone"
+                        name="roomId"
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="phone"
+                                label="Room Id"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -156,69 +180,11 @@ const CreateEmployee = () => {
                             />
                         )}
                         rules={{
-                            required: 'phone is required',
-                            pattern: {
-                                value: /^[0-9]{11}$/,
-                                message: 'invalid phone number',
-                            },
+                            required: 'room id is required',
+                        }}
+                    />
+                </Grid>
 
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Controller
-                        name="password"
-                        control={control}
-                        render={({field: {onChange, value}, fieldState: {error}}) => (
-                            <TextField
-                                label="password"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                disabled={isLoading}
-                                value={value}
-                                margin={'normal'}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="password"
-                            />
-                        )}
-                        rules={{
-                            minLength: {
-                                value: 8,
-                                message: 'password must be at least 8 characters',
-                            },
-                            required: 'password is required',
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Controller
-                        name="address"
-                        control={control}
-                        render={({field: {onChange, value}, fieldState: {error}}) => (
-                            <TextField
-                                label="address"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                multiline
-                                maxRows={2}
-                                disabled={isLoading}
-                                value={value}
-                                margin={'normal'}
-                                onChange={onChange}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                type="text"
-                            />
-                        )}
-                        rules={{
-                            required: 'address is required',
-                        }}
-                    />
-                </Grid>
 
                 {isError && (
                     <Alert
@@ -253,10 +219,24 @@ const CreateEmployee = () => {
                         create
                     </Button>
                 </Grid>
+                <Grid item xs={6} sm={3}>
+                    <Button
+                        onClick={()=>{
+                            onDelete();
+                        }}
+                        fullWidth
+                        variant="contained"
+                        disabled={isLoading}
+
+                        sx={{mt: 3, mb: 2}}
+                    >
+                        delete
+                    </Button>
+                </Grid>
 
             </Grid>
         </Box>
     )
 }
 
-export default CreateEmployee;
+export default EditReservation;

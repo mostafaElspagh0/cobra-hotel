@@ -15,7 +15,10 @@ import {AuthContext} from "../../auth/context/AuthContext";
 import {PopupContext} from "../../../common/contexts/PopupContext";
 
 import Typography from "@mui/material/Typography";
+import styled from "@emotion/styled";
 
+const StyledRating = styled(Rating)({
+});
 
 const ReviewEmployee = () => {
     const {handleSubmit, control} = useForm();
@@ -39,11 +42,28 @@ const ReviewEmployee = () => {
                         name="rating"
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
-                            <Grid container  >
-                                <Typography component="legend">rating</Typography>
+                            <Grid container  style={
+                                {
+                                    color: "black",
+                                }
+                            }>
+                                rating
                                 <Box margin={1}/>
-                                <Rating
+                                <StyledRating
+
+                                    style={{
+                                        // blur background
+
+                                        // border
+                                        backgroundColor: "gray",
+                                        boxShadow: "0 0 0 1px #fff",
+                                        border: "1px solid #e0e0e0",
+                                        // border: "1px solid rgba(0, 0, 0, 0.1)",
+                                        // color: "secondary"
+                                    }}
+                                    color={"black"}
                                     max={10}
+                                    size={'large'}
                                     name="simple-controlled"
                                     value={value}
                                     onChange={onChange}

@@ -4,7 +4,7 @@ import  {PopupContext} from "../../../common/contexts/PopupContext";
 import {Fragment, useContext, useEffect, useState} from "react";
 import {Outlet, useNavigate} from "react-router-dom";
 import {ButtonGroup, FormControl, InputAdornment, OutlinedInput} from "@material-ui/core";
-import {Container, IconButton} from "@mui/material";
+import {Button, Container, IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import GradingTwoToneIcon from "@mui/icons-material/GradingTwoTone";
 import Popup from "../../../common/components/Popup";
@@ -43,18 +43,10 @@ const Reservation = () => {
                         <IconButton onClick={
                             (k) => {
                                 openPopup(e.row)
-                                Navigate(`/dashboard/Employee/edit/${e.row._id}`)
+                                Navigate(`/dashboard/Reservation/edit/${e.row._id}`)
                             }
                         }>
                             <EditIcon/>
-                        </IconButton>
-                        <IconButton onClick={
-                            (k) => {
-                                openPopup(e.row)
-                                Navigate(`/dashboard/Employee/review/${e.row._id}`)
-                            }
-                        }>
-                            <GradingTwoToneIcon/>
                         </IconButton>
                     </ButtonGroup>
                 )
@@ -127,9 +119,6 @@ const Reservation = () => {
         e.preventDefault();
         addSearchTerm(searchText);
     };
-    const handleSearchChange = (e) => {
-        setSearchText(e.target.value);
-    };
     const handlePageChange = (page) => {
         getPage(page);
     };
@@ -156,20 +145,14 @@ const Reservation = () => {
                 <Grid container spacing={3} justifyContent={'center'}>
                     <Grid item xs={12}/>
                     <Grid item xs={12} component={"form"} onSubmit={handleSearch}>
-                        <FormControl
-                            fullWidth>
-                            <OutlinedInput
-                                onChange={handleSearchChange}
-                                value={searchText}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton type={"submit"}>
-                                            <SearchIcon/>
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                            />
-                        </FormControl>
+                       <Button
+                           variant={'contained'}
+                           fullWidth
+                           onClick={() => {
+                               openPopup();
+                               Navigate(`/dashboard/Reservation/add`)
+                           }}
+                       > add</Button>
                     </Grid>
 
                     <Grid item xs={12}>

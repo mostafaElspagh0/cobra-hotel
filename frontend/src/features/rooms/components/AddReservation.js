@@ -1,64 +1,59 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useState} from "react";
 import {
     CircularProgress,
+    IconButton,
     TextField
 } from "@material-ui/core";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import {Alert, CssBaseline} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import {useForm, Controller} from "react-hook-form";
-import {HrContext} from "../context/hrContext";
 import Grid from "@mui/material/Grid";
-import {PopupContext} from "../../../common/contexts/PopupContext";
-import * as Api from "../api/employeeApi";
+import MenuItem from "@mui/material/MenuItem";
+import * as Api from "../api/reservationApi";
 import {AuthContext} from "../../auth/context/AuthContext";
+import {PopupContext} from "../../../common/contexts/PopupContext";
+import {ReservationContext} from "../context/reservationContext";
 
-const EditEmployee = () => {
-    const {handleSubmit, control, setValue} = useForm();
-    const [isLoading] = React.useState(false);
-
-    const {updateRows,rows} = useContext(HrContext);
+const AddReservation = (props) => {
+    const {handleSubmit, control} = useForm();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
-    const {getPopupData, closePopup} = useContext(PopupContext);
+    const [errorMessage, setErrorMessage] = useState("");
+    const {updateRows} = useContext(ReservationContext);
+    const {closePopup} = useContext(PopupContext);
+    const onCreate = (data) => {
+        setIsLoading(true);
+        setIsError(false);
+        setErrorMessage("");
+        Api.addReservation(getToken(), data)
+            .then(() => {
+                setIsLoading(false);
+                updateRows().then(() => {
+                    closePopup()
+                });
+            })
+            .catch(error => {
+                setIsLoading(false);
+                setIsError(true);
+                setErrorMessage(error.message);
+            });
 
-    const onUpdate = (data) => {
-        let row = {
-            ...popupData,
-            ...data
-        }
-
-        Api.updateEmployeeById(getToken(), row._id ,row).then(res => {
-            updateRows({count: rows.count, users: rows.users.map(r => r._id === row._id ? res.data.user : r)})
-        }).then(() => {
-            closePopup();
-        })
     };
-    const onDelete = () => {
-        Api.deleteEmployeeById(getToken(), popupData._id).then(() => {
-            updateRows({count: rows.count -1, users: rows.users.filter(r => r._id !== popupData._id)})
-        }).then(() => {
-            closePopup();
-        })
-    };
-    const popupData = getPopupData();
-    useEffect(()=>{
-        if(popupData){
-            setValue("name", popupData.name);
-            setValue("email", popupData.email);
-            setValue("phone", popupData.phone);
-            setValue("address", popupData.address);
-            setValue("job_type", popupData.job_type);
-        }
-    },[popupData])
     return (
-        <Box component="form" onSubmit={handleSubmit(onUpdate)} noValidate sx={{mt: 1}}>
+        <Box component="form" onSubmit={handleSubmit(onCreate)} noValidate sx={{mt: 1}}>
+            <CssBaseline/>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="name"
+                        name="startDate"
+                        defaultValue={"2021-12-03"}
                         control={control}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="name"
+                                label="Start Date"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -68,7 +63,8 @@ const EditEmployee = () => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                type="text"
+                                type="date"
+
                             />
                         )}
                         rules={{
@@ -78,14 +74,15 @@ const EditEmployee = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Controller
-                        name="phone"
+                        name="type"
+                        defaultValue={"full"}
                         control={control}
-                        defaultValue={popupData.phone}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="phone"
+                                label="type"
                                 variant="outlined"
                                 fullWidth
+                                select
                                 required
                                 disabled={isLoading}
                                 value={value}
@@ -94,25 +91,25 @@ const EditEmployee = () => {
                                 error={!!error}
                                 helperText={error ? error.message : null}
                                 type="text"
-                            />
+                            >
+                                <MenuItem value='full'>full</MenuItem>
+                                <MenuItem value='b&b'>b&b</MenuItem>
+                                <MenuItem value='half'>half</MenuItem>
+                            </TextField>
                         )}
                         rules={{
-                            required: 'phone is required',
-                            equalTo: {
-                                value: 11,
-                                message: 'phone must be equal to phone'
-                            }
+                            required: 'reservation type is required',
                         }}
                     />
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={12} sm={6}>
                     <Controller
-                        name="job_type"
+                        name="endDate"
+                        defaultValue={"2021-12-03"}
                         control={control}
-                        defaultValue={popupData.job_type}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="job_type"
+                                label="End Date"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -122,35 +119,27 @@ const EditEmployee = () => {
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                type="text"
+                                type="date"
                             />
                         )}
                         rules={{
-                            required: 'job type required',
-                            validate: value => {
-                                if (['Manager', 'Hr', 'Receptionist', 'Barista'].includes(value)) {
-                                    return true;
-                                }
-                                return 'job type must be admin, hr or employee';
-                            }
-
+                            required: 'end date is required',
                         }}
                     />
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={12} sm={6}>
                     <Controller
-                        name="email"
+                        name="roomId"
                         control={control}
-                        defaultValue={popupData.email}
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="email"
+                                label="Room Id"
                                 variant="outlined"
                                 fullWidth
-                                disabled={isLoading}
                                 required
-                                margin={'normal'}
+                                disabled={isLoading}
                                 value={value}
+                                margin={'normal'}
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
@@ -158,12 +147,30 @@ const EditEmployee = () => {
                             />
                         )}
                         rules={{
-                            required: 'Password required',
-                            minLength: {value: 8, message: 'Password must be at least 8 characters'}
+                            required: 'room id is required',
                         }}
                     />
                 </Grid>
 
+
+                {isError && (
+                    <Alert
+                        severity="error"
+                        action={
+                            <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => setIsError(false)}
+                            >
+                                <CloseIcon/>
+                            </IconButton>
+                        }
+                    >
+                        {errorMessage}
+                    </Alert>
+
+                )}
                 {isLoading && (
                     <CircularProgress/>
                 )}
@@ -176,25 +183,13 @@ const EditEmployee = () => {
 
                         sx={{mt: 3, mb: 2}}
                     >
-                        Update
+                        create
                     </Button>
                 </Grid>
-                <Grid item xs={6} sm={3}>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        disabled={isLoading}
-                        onClick={() => {
-                            onDelete();
-                        }}
-                        sx={{mt: 3, mb: 2}}
-                    >
-                        delete
-                    </Button>
-                </Grid>
+
             </Grid>
         </Box>
     )
 }
 
-export default EditEmployee;
+export default AddReservation;

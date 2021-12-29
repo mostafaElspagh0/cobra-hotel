@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import * as Api from "../api/employeeApi";
+import * as Api from "../api/reservationApi";
 import {AuthContext} from "../../auth/context/AuthContext";
 import * as React from "react";
 import {useLocation} from "react-router-dom";
@@ -33,7 +33,7 @@ const ReservationContextProvider = (props) => {
     const getPage = async (page, search) => {
         setPage(page);
         setIsLoading(true);
-        return Api.getEmployees(getToken(), page, 10, search).then(
+        return Api.getReservations(getToken(), page, 10, search).then(
             (res) => {
                 setRows(res.data)
                 setIsLoading(false);
@@ -48,9 +48,9 @@ const ReservationContextProvider = (props) => {
                 if (location.pathname.includes('edit')) {
                     setIsLoading(true);
                     let id = location.pathname.split('/')[4]
-                    Api.getEmployeeId(getToken(), id).then(res => {
-                        setIsLoading(false);
-                    })
+                    // Api.getEmployeeId(getToken(), id).then(res => {
+                    //     setIsLoading(false);
+                    // })
                 } else {
                     await getPage(0);
                 }
