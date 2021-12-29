@@ -104,12 +104,12 @@ const DashBoardPage = () => {
                 break;
             case 'Receptionist':
                 ret = [
-                    pages['Orders'],
-                    pages['Storage'],
-                    pages['Arrival'],
-                    // pages['Cleaning'],
-                    pages['rooms'],
-                    pages['Reservation']
+                    // pages['Orders'],
+                    // pages['Storage'],
+                    // pages['Arrival'],
+                    // // pages['Cleaning'],
+                    // pages['rooms'],
+                    // pages['Reservation']
                 ];
                 break;
             case 'Barista':
@@ -122,8 +122,9 @@ const DashBoardPage = () => {
                 return [];
         }
         // decode the url
-
+        console.log(ret)
         return ret.map(page => {
+            console.log(page);
             return {
                 name: page.name,
                 path: page.path,
