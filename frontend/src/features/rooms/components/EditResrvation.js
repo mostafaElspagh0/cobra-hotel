@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import * as Api from "../api/reservationApi";
 import {AuthContext} from "../../auth/context/AuthContext";
 import {PopupContext} from "../../../common/contexts/PopupContext";
-import {ReservationContext} from "../context/reservationContext";
+import {RoomsContext} from "../context/reservationContext";
 import popup from "../../../common/components/Popup";
 
 const EditReservation = (props) => {
@@ -23,7 +23,7 @@ const EditReservation = (props) => {
     const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState("");
-    const {updateRows} = useContext(ReservationContext);
+    const {updateRows} = useContext(RoomsContext);
     const {closePopup,getPopupData} = useContext(PopupContext);
     useEffect(()=>{
         try{

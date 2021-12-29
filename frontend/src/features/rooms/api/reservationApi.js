@@ -22,7 +22,7 @@ async function addReservation(token, data) {
 }
 
 
-const getReservations = async (token, page, perPage, searchTerm) => {
+const getRooms = async (token, page, perPage, searchTerm) => {
     return await axios.get(`${config.api_url}/reservation`, {
         headers: {
             "x-auth-token": token
@@ -52,6 +52,6 @@ async function editReservation(token,id, data) {
 
 export {
     addReservation,
-    getReservations,
+    getRooms,
     editReservation
 }

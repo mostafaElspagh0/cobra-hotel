@@ -11,10 +11,10 @@ import Popup from "../../../common/components/Popup";
 import Grid from "@mui/material/Grid";
 import SearchIcon from "@mui/icons-material/Search";
 import {DataGrid} from "@mui/x-data-grid";
-import {ReservationContext} from "../context/reservationContext";
+import {RoomsContext} from "../context/roomsContext";
 
 
-const Reservation = () => {
+const Rooms = () => {
     const {
         getPage,
         isLoading,
@@ -23,7 +23,7 @@ const Reservation = () => {
         init,
         addSearchTerm,
         searchTerm,
-    } = useContext(ReservationContext);
+    } = useContext(RoomsContext);
     const Navigate = useNavigate();
     const {
         openPopup,
@@ -184,4 +184,4 @@ const Reservation = () => {
         </Fragment>
     );
 }
-export default Reservation;
+export default Rooms;

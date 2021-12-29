@@ -21,6 +21,7 @@ import {CssBaseline} from "@mui/material";
 import AnnouncementViews from "./features/Announcment/components/AnnouncementViews";
 import AddReservation from "./features/reservation/components/AddReservation";
 import EditReservation from "./features/reservation/components/EditResrvation";
+import Rooms from "./features/rooms/components/Rooms";
 
 const Com = () => {
     let c = useParams();
@@ -85,7 +86,7 @@ function App() {
                     <Route path="Rooms" element={
                         <RequireRole roles={['Manager', "Hr"]}>
                             <PopupContextProvider>
-                                <Reservation/>
+                                <Rooms/>
                             </PopupContextProvider>
                         </RequireRole>}/>
 

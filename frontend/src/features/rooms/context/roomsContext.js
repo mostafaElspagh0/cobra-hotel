@@ -4,9 +4,9 @@ import {AuthContext} from "../../auth/context/AuthContext";
 import * as React from "react";
 import {useLocation} from "react-router-dom";
 
-const ReservationContext = createContext()
+const RoomsContext = createContext()
 
-const ReservationContextProvider = (props) => {
+const RoomsContextProvider = (props) => {
     const [page, setPage] = useState(0);
     const [rows, setRows] = useState({users: [], count: 0});
     const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +33,7 @@ const ReservationContextProvider = (props) => {
     const getPage = async (page, search) => {
         setPage(page);
         setIsLoading(true);
-        return Api.getReservations(getToken(), page, 10, search).then(
+        return Api.getRooms(getToken(), page, 10, search).then(
             (res) => {
                 setRows(res.data)
                 setIsLoading(false);
@@ -47,9 +47,9 @@ const ReservationContextProvider = (props) => {
                 await getPage(0);
                 if (location.pathname.includes('edit')) {
                     setIsLoading(true);
-                    let id = location.pathname.split('/')[4]
-                    // Api.getEmployeeId(getToken(), id).then(res => {
-                    //     setIsLoading(false);
+                    // let id = location.pathname.split('/')[4]
+                    // // Api.getEmployeeId(getToken(), id).then(res => {
+                    // //     setIsLoading(false);
                     // })
                 } else {
                     await getPage(0);
@@ -59,7 +59,7 @@ const ReservationContextProvider = (props) => {
         }
     }, [firstLoad]);
     return (
-        <ReservationContext.Provider value={
+        <RoomsContext.Provider value={
             {
                 rows,
                 getPage,
@@ -74,8 +74,8 @@ const ReservationContextProvider = (props) => {
             }
         }>
             {props.children}
-        </ReservationContext.Provider>
+        </RoomsContext.Provider>
     )
 }
 
-export {ReservationContext, ReservationContextProvider}
+export {RoomsContext, RoomsContextProvider}

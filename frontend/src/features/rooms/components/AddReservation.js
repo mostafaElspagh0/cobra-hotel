@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import * as Api from "../api/reservationApi";
 import {AuthContext} from "../../auth/context/AuthContext";
 import {PopupContext} from "../../../common/contexts/PopupContext";
-import {ReservationContext} from "../context/reservationContext";
+import {RoomsContext} from "../context/reservationContext";
 
 const AddReservation = (props) => {
     const {handleSubmit, control} = useForm();
@@ -22,7 +22,7 @@ const AddReservation = (props) => {
     const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState("");
-    const {updateRows} = useContext(ReservationContext);
+    const {updateRows} = useContext(RoomsContext);
     const {closePopup} = useContext(PopupContext);
     const onCreate = (data) => {
         setIsLoading(true);
