@@ -6,10 +6,10 @@ import {
 } from "@material-ui/core";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {Alert, CssBaseline} from "@mui/material";
+import {Alert} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {useForm, Controller} from "react-hook-form";
-import {ZalapyaContext} from "../context/zalapyaContext";
+import {HrContext} from "../context/hrContext";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import * as Api from "../api/employeeApi";
@@ -22,7 +22,7 @@ const CreateEmployee = () => {
     const [isError, setIsError] = useState(false);
     const {getToken} = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState("");
-    const {updateRows} = useContext(ZalapyaContext);
+    const {updateRows} = useContext(HrContext);
     const {closePopup} = useContext(PopupContext);
     const onCreate = (data) => {
         setIsLoading(true);
@@ -44,7 +44,6 @@ const CreateEmployee = () => {
     };
     return (
         <Box component="form" onSubmit={handleSubmit(onCreate)} noValidate sx={{mt: 1}}>
-            <CssBaseline/>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <Controller

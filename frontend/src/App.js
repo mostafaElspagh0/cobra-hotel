@@ -15,9 +15,10 @@ import Storage from "./features/Storage/Storage";
 import PopupContextProvider from "./common/contexts/PopupContext";
 import CreateEmployee from "./features/hr/components/createEmployee";
 import ReviewEmployee from "./features/hr/components/ReviewEmployee";
-import Reservation from "./features/hr2/components/Reservation";
+import Reservation from "./features/reservation/components/Reservation";
 import ResetPassword from "./features/auth/components/ResetPassword";
 import {CssBaseline} from "@mui/material";
+import AnnouncementViews from "./features/Announcment/components/AnnouncementViews";
 
 const Com = () => {
     let c = useParams();
@@ -35,6 +36,11 @@ function App() {
                 <Route path="/resetpassword/:token" element={<ResetPassword/>}/>
 
                 <Route path="/dashboard" element={<DashBoardPage/>}>
+                    <Route path="" element={
+
+                            <AnnouncementViews/>
+
+                    }/>
                     <Route path="employee" element={
                         <RequireRole roles={['Manager', 'Hr']}>
                             <PopupContextProvider>
@@ -52,13 +58,31 @@ function App() {
                     <Route path="Orders" element={<RequireRole roles={['Manager', 'Barista']}><Orders/></RequireRole>}/>
                     <Route path="Announcement"
                            element={<RequireRole roles={['Manager', "Hr"]}><Announcement/></RequireRole>}/>
-                    <Route path="Arrival" element={<RequireRole roles={['Manager', "Hr"]}><Arrival/></RequireRole>}/>
-                    <Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}><Clean/></RequireRole>}/>
+                    <Route path="Arrival" element={
+                        <RequireRole roles={['Manager', "Hr"]}>
+                            <PopupContextProvider>
+                                <Reservation/>
+                            </PopupContextProvider>
+                        </RequireRole>}/>
+                    <Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}>
+                        <PopupContextProvider>
+                            <Reservation/>
+                        </PopupContextProvider>
+                    </RequireRole>}/>
                     <Route path="Storage" element={<RequireRole roles={['Manager', "Hr"]}><Storage/></RequireRole>}/>
                     <Route path="Reservation" element={
-                        <RequireRole roles={['Manager', "Hr"]}><PopupContextProvider>
-                            <Reservation/>
-                    </PopupContextProvider></RequireRole>}/>
+                        <RequireRole roles={['Manager', "Hr"]}>
+                            <PopupContextProvider>
+                                <Reservation/>
+                            </PopupContextProvider>
+                        </RequireRole>}/>
+
+                    <Route path="Rooms" element={
+                        <RequireRole roles={['Manager', "Hr"]}>
+                            <PopupContextProvider>
+                                <Reservation/>
+                            </PopupContextProvider>
+                        </RequireRole>}/>
 
                     <Route path=":id" element={<Com/>}/>
                 </Route>

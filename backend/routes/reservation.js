@@ -4,6 +4,8 @@ const {check, validationResult} = require('express-validator');
 const {isA} = require('../services/auth/middlelayers/rolesMiddleLayer');
 const Reservation = require('../services/database/models/reservation');
 const Room = require('../services/database/models/room');
+const config = require("config");
+const User = require("../services/database/models/user");
 router.use(isA(["Manager", "Receptionist"]));
 
 
@@ -86,17 +88,40 @@ router.delete("/:id",
 router.get("/",
     async (req, res) => {
         try {
-            const page = req.query.page || 1;
-            const limit = req.query.limit || 10;
-            const skip = (page - 1) * limit;
-            const reservations = await Reservation
-                .find()
-                .skip(skip)
-                .limit(limit)
-                .populate("user","-password")
-                .populate("room")
-                .exec();
-            res.status(200).json(reservations);
+            const perPage = req.query.perPage * 1 || config.get('perPage') * 1;
+            const page = req.query.page * 1 || 0;
+            const search = req.query.search
+            if (search) {
+                try {
+                    const users = await Reservation.find({
+                        $or: [{name: {$regex: search, $options: 'i'}}, {
+                            email: {
+                                $regex: search,
+                                $options: 'i'
+                            }
+                        }]
+                    }).populate("user","-password")
+                        .populate("room").skip(perPage * page).limit(perPage);
+                    const count = await Reservation.countDocuments({
+                        $or: [{
+                            name: {
+                                $regex: search,
+                                $options: 'i'
+                            }
+                        }, {email: {$regex: search, $options: 'i'}}]
+                    });
+                    res.json({users, count});
+                } catch (err) {
+                    console.error(err.message);
+                    res.status(500).send('Server Error');
+                }
+
+            } else {
+                let users = await Reservation.find().populate("user","-password")
+                    .populate("room").limit(perPage).skip(perPage * page);
+                let count = await Reservation.countDocuments();
+                return res.json({users, count});
+            }
         } catch (e) {
             res.status(500).json({errors: [{msg: e.message}]});
         }

@@ -10,7 +10,7 @@ import {useContext} from "react";
 import {DarkModeContext} from "../../darkMode/DarkModeProvider";
 import {useForm, Controller} from "react-hook-form";
 import CloseIcon from '@mui/icons-material/Close';
-import {Navigate, useNavigate} from 'react-router-dom';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext";
 
 const ResetPassword = ()=>{
@@ -18,13 +18,15 @@ const ResetPassword = ()=>{
     const {handleSubmit, control} = useForm();
     const {status, error, dismissError} = useContext(AuthContext);
     const navigate = useNavigate();
+    const params = useParams();
     const {
         isAuthenticated,
-        forgetPassword
+        resetPassword
     } = useContext(AuthContext);
     const onSubmit = (data) => {
-        forgetPassword(data.email);
-        //signIn(data.email, data.password);
+        dismissError();
+        resetPassword(data.new_password,params.token);
+
     };
     if(isAuthenticated){
         return <Navigate to="/"/>
@@ -56,12 +58,12 @@ const ResetPassword = ()=>{
                 }}/>
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
                     <Controller
-                        name="new password"
+                        name="new_password"
                         control={control}
                         defaultValue=""
                         render={({field: {onChange, value}, fieldState: {error}}) => (
                             <TextField
-                                label="Email"
+                                label="new password"
                                 variant="outlined"
                                 fullWidth
                                 required
@@ -71,11 +73,15 @@ const ResetPassword = ()=>{
                                 onChange={onChange}
                                 error={!!error}
                                 helperText={error ? error.message : null}
-                                type="email"
+                                type="password"
                             />
                         )}
                         rules={{
                             required: 'new password is required',
+                            minLength: {
+                                value: 8,
+                                message: 'password must be at least 8 characters'
+                            },
                         }}
                     />
 
@@ -99,21 +105,7 @@ const ResetPassword = ()=>{
 
                     )}
                     {status === 'success' && (
-                        <Alert
-                            severity="success"
-                            action={
-                                <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => dismissError()}
-                                >
-                                    <CloseIcon/>
-                                </IconButton>
-                            }
-                        >
-                            reset password link has been sent to your email
-                        </Alert>
+                        <Navigate to="/"/>
 
                     )}
                     {status === 'loading' && (
@@ -128,20 +120,9 @@ const ResetPassword = ()=>{
 
                         sx={{mt: 3, mb: 2}}
                     >
-                        Sign In
+                        Reset Password
                     </Button>
-                    <Typography variant="body2" color="textSecondary" align="left">
-                        {'you have your password? '}
-                        <Button
-                            onClick={() => {navigate('/login'); dismissError()}}
-                            variant="text"
-                            color="primary"
-                            disabled={status === 'loading'}
-                            sx={{ml: 2}}
-                        >
-                            login instead
-                        </Button>
-                    </Typography>
+
 
                 </Box>
             </Box>

@@ -9,21 +9,26 @@ import {AuthProvider} from "./features/auth/context/AuthContext";
 import {BrowserRouter} from "react-router-dom";
 import {ZalapyaTableContextProvider} from "./features/hr/context/zalapyaContext";
 import {EmailContextProvider} from "./features/mail/context/emailContext";
+import {ReservationContextProvider} from "./features/reservation/context/reservationContext";
 
 ReactDOM.render(
     <React.StrictMode>
         <CssBaseline/>
+        <DarkModeProvider>
         <BrowserRouter>
-            <DarkModeProvider>
+
                 <AuthProvider>
                     <EmailContextProvider>
                         <ZalapyaTableContextProvider>
-                            <App/>
+                            <ReservationContextProvider>
+                                <App/>
+                            </ReservationContextProvider>
                         </ZalapyaTableContextProvider>
                     </EmailContextProvider>
                 </AuthProvider>
-            </DarkModeProvider>
+
         </BrowserRouter>
+        </DarkModeProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

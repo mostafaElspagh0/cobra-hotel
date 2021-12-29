@@ -12,7 +12,7 @@ export async function updateEmployeeById(token, id, data) {
 
 
 const getEmployees = async (token, page, perPage, searchTerm) => {
-    return await axios.get(`${config.api_url}/employee`, {
+    return await axios.get(`${config.api_url}/reservation`, {
         headers: {
             "x-auth-token": token
         },

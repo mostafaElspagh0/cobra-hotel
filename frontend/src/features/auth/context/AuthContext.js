@@ -73,6 +73,26 @@ const AuthProvider = (props) => {
         }
     };
 
+    const resetPassword = async (resetToken , newPassword)=>{
+
+        try {
+            let res = await Api.resetPassword(newPassword,resetToken);
+            if(res.status === 200){
+                setStatus("success");
+                setError(null);
+
+            }else{
+                setError("invalid token");
+
+                setStatus("error");
+            }
+        } catch (e) {
+            setError("invalid token");
+
+            setStatus("error");
+        }
+    };
+
 
 
     const getRole = () => {
@@ -121,7 +141,8 @@ const AuthProvider = (props) => {
                 dismissError,
                 getRole,
                 getToken,
-                forgetPassword
+                forgetPassword,
+                resetPassword
             }
         }>
             {props.children}

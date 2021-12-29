@@ -58,9 +58,16 @@ const DashBoardPage = () => {
                     return <div>Dashboard</div>
                 }
             },
-            'Cleaning': {
-                name: "Cleaning",
-                path: "Cleaning",
+            // 'Cleaning': {
+            //     name: "Cleaning",
+            //     path: "Cleaning",
+            //     component: () => {
+            //         return <div>Dashboard</div>
+            //     }
+            // },
+            'rooms': {
+                name: "Rooms",
+                path: "rooms",
                 component: () => {
                     return <div>Dashboard</div>
                 }
@@ -83,7 +90,8 @@ const DashBoardPage = () => {
                     // pages['Orders'],
                     // pages['Storage'],
                     pages['Arrival'],
-                    pages['Cleaning'],
+                    // pages['Cleaning'],
+                    pages['rooms'],
                     pages['Reservation']
                 ];
                 break;
@@ -99,7 +107,8 @@ const DashBoardPage = () => {
                     pages['Orders'],
                     pages['Storage'],
                     pages['Arrival'],
-                    pages['Cleaning'],
+                    // pages['Cleaning'],
+                    pages['rooms'],
                     pages['Reservation']
                 ];
                 break;

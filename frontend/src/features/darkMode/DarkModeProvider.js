@@ -23,12 +23,11 @@ const DarkModeProvider = props => {
             },
             ...(mode === 'light'
                 ? {
-                    // palette values for light mode
 
                 }
                 : {
-                    // palette values for dark mode
-                    secondary: deepOrange,
+
+
 
                 }),
         },

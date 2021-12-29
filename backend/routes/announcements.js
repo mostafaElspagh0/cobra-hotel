@@ -16,7 +16,7 @@ router.get("/my",
         const filter = {$or: [{target_audience: req.user.job_type}, {target_audience: "All"}]};
         const perPage = req.query.perPage * 1 || config.get('perPage') * 1;
         const page = req.query.page * 1 || 0;
-        let announcements = await Announcement.find(filter).limit(perPage).skip(perPage * page);
+        let announcements = await Announcement.find(filter).populate("issued_by").sort("-created_at").limit(perPage).skip(perPage * page);
         let total = await Announcement.countDocuments(filter);
         return res.json({announcements, total});
     });

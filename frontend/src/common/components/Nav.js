@@ -16,7 +16,7 @@ import avatar from '../resoursces/avat.png';
 import {useContext, useState} from "react";
 import PropTypes from 'prop-types';
 import {ButtonGroup} from "@material-ui/core";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../../features/auth/context/AuthContext";
 import {DarkModeContext} from "../../features/darkMode/DarkModeProvider";
 import Switch from "@material-ui/core/Switch";
@@ -50,9 +50,14 @@ const Nav = ({pages, activePage}) => {
                         sx={{mr: 2, display: {xs: 'none', md: 'flex'}}}
                     >
                         <CssBaseline>
+                            <Link to={'/'}>
                             <Box sx={{display: 'flex'}}>
+
+
                                 <img src={logo} alt={logo} width={60}/>
+
                             </Box>
+                            </Link>
                         </CssBaseline>
                     </Typography>
                     {/*small screen*/}

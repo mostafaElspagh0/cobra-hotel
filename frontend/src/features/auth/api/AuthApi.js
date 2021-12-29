@@ -17,7 +17,16 @@ const forgetPassword = async (email) => {
     });
     
 }
+
+const resetPassword = async (token,newPassword) => {
+    return axios.post(`${config.api_url}/auth/resetPassword`, {
+        new_password: newPassword,
+        token: token
+    });
+
+}
 export {
     signIn,
-    forgetPassword
+    forgetPassword,
+    resetPassword
 }
