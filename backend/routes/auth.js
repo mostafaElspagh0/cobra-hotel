@@ -86,7 +86,6 @@ router.post("/resetPassword",
         }
         let {token, new_password} = req.body;
         let decoded = await validateToken(token);
-        console.log(decoded)
 
         if(!decoded){
             return res.status(400).json({errors: [{msg: 'Invalid token'}]});

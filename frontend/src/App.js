@@ -67,12 +67,12 @@ function App() {
                                 <Reservation/>
                             </PopupContextProvider>
                         </RequireRole>}/>
-                    {/*<Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}>*/}
-                    {/*    <PopupContextProvider>*/}
-                    {/*        <Reservation/>*/}
-                    {/*    </PopupContextProvider>*/}
-                    {/*</RequireRole>}/>*/}
-                    {/*<Route path="Storage" element={<RequireRole roles={['Manager', "Hr"]}><Storage/></RequireRole>}/>*/}
+                    <Route path="Cleaning" element={<RequireRole roles={['Manager', "Hr"]}>
+                        <PopupContextProvider>
+                            <Clean/>
+                        </PopupContextProvider>
+                    </RequireRole>}/>
+                    <Route path="Storage" element={<RequireRole roles={['Manager', "Hr"]}><Storage/></RequireRole>}/>
                     <Route path="Reservation" element={
                         <RequireRole roles={['Manager', "Hr"]}>
                             <PopupContextProvider>

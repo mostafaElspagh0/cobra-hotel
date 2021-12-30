@@ -37,20 +37,20 @@ const DashBoardPage = () => {
                     return <div>Dashboard</div>
                 }
             },
-            // 'Orders': {
-            //     name: "Orders",
-            //     path: "Orders",
-            //     component: () => {
-            //         return <div>Dashboard</div>
-            //     }
-            // },
-            // 'Storage': {
-            //     name: "Storage",
-            //     path: "Storage",
-            //     component: () => {
-            //         return <div>Dashboard</div>
-            //     }
-            // },
+            'Orders': {
+                name: "Orders",
+                path: "Orders",
+                component: () => {
+                    return <div>Dashboard</div>
+                }
+            },
+            'Storage': {
+                name: "Storage",
+                path: "Storage",
+                component: () => {
+                    return <div>Dashboard</div>
+                }
+            },
             'Arrival': {
                 name: "Arrival",
                 path: "Arrival",
@@ -58,13 +58,13 @@ const DashBoardPage = () => {
                     return <div>Dashboard</div>
                 }
             },
-            // 'Cleaning': {
-            //     name: "Cleaning",
-            //     path: "Cleaning",
-            //     component: () => {
-            //         return <div>Dashboard</div>
-            //     }
-            // },
+            'Cleaning': {
+                name: "Cleaning",
+                path: "Cleaning",
+                component: () => {
+                    return <div>Dashboard</div>
+                }
+            },
             'rooms': {
                 name: "Rooms",
                 path: "rooms",
@@ -87,10 +87,10 @@ const DashBoardPage = () => {
                     pages['Employee'],
                     pages['Announcement'],
                     pages['Send E-mail'],
-                    // pages['Orders'],
-                    // pages['Storage'],
+                    pages['Orders'],
+                    pages['Storage'],
                     pages['Arrival'],
-                    // pages['Cleaning'],
+                    pages['Cleaning'],
                     pages['rooms'],
                     pages['Reservation']
                 ];
@@ -104,18 +104,18 @@ const DashBoardPage = () => {
                 break;
             case 'Receptionist':
                 ret = [
-                    // pages['Orders'],
-                    // pages['Storage'],
-                    // pages['Arrival'],
-                    // // pages['Cleaning'],
-                    // pages['rooms'],
-                    // pages['Reservation']
+                    pages['Orders'],
+                    pages['Storage'],
+                    pages['Arrival'],
+                    pages['Cleaning'],
+                    pages['rooms'],
+                    pages['Reservation']
                 ];
                 break;
             case 'Barista':
                 ret = [
-                    // pages['Orders'],
-                    // pages['Storage'],
+                    pages['Orders'],
+                    pages['Storage'],
                 ];
                 break;
             default:
