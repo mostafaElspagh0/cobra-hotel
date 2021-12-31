@@ -17,10 +17,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 app.use(logger('dev'));
-app.use(cors({
-    origin: config.get('corsOrigin'),
-    credentials: true
-}));
+app.use(cors());
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
